@@ -78,7 +78,7 @@ document.getElementById('paramForm').addEventListener('submit', function(event) 
   // Get the iteration number
   const iterations = document.getElementById('iterations').value;
   // Start building the URL with the iterations parameter first
-  let url = `http://localhost:3000/runJava?iterations=${iterations}&`;
+  let url = `/runGameTheory?iterations=${iterations}&`;
 
   let counter = 0;
 
