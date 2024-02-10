@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Turing Machine</title>
+  <link rel="stylesheet" type="text/css" href="/css/main.css">
+  <link rel="stylesheet" type="text/css" href="/css/turing.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+</head>
+<body>
+  <h1>Turing Machine</h1>
+  <form action="/runTuring" method="get">
+    <label for="tape">Tape:</label><br>
+    <input type="text" id="tape" name="tape"><br>
+    <label for="program">Program:</label><br>
+    <textarea id="program" name="program" rows="4" cols="50"></textarea><br>
+    <input type="submit" value="Run">
+  </form>
+  <button id="binaryPalindromeChecker">Load Binary Palindrome Checker</button>
+  <button id="binaryToDecimalConverter">Load Binary to Decimal Converter</button>
+  <div id="output"></div>
+  <script src="js/turing.js"></script>
+</body>
+</html>

@@ -1,0 +1,78 @@
+/* styles.css */
+body {
+    font-family: 'Courier New', Courier, monospace;
+    background-color: #000;
+    color: #0f0;
+    box-sizing: border-box;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+  }
+
+  h2 {
+    font-size: 2em;
+    text-shadow: 0 0 5px #0f0;
+  }
+  
+  @keyframes glow {
+    0% {
+      box-shadow: 0 0 5px #0f0, 0 0 10px #0f0, 0 0 15px #0f0, 0 0 20px #0f0;
+    }
+    100% {
+      box-shadow: 0 0 10px #0f0, 0 0 20px #0f0, 0 0 30px #0f0, 0 0 40px #0f0;
+    }
+  }
+  
+  form {
+    border: 2px solid #0f0;
+    padding: 20px;
+    box-sizing: border-box;
+    margin-bottom: 20px;
+    animation: glow 2s ease-in-out infinite alternate;
+    width: 100%;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+ 
+  
+  @media (max-width: 600px) {
+    body {
+      padding: 10px;
+    }
+  
+    h2 {
+      font-size: 1.5em;
+    }
+  
+    form {
+      padding: 10px;
+    }
+  }
+  
+  label, input, button, table {
+    display: block;
+    margin-bottom: 10px;
+  }
+  
+  button, input[type="number"], input[type="submit"] {
+    background-color: #000;
+    color: #0f0;
+    border: 1px solid #0f0;
+  }
+  
+  button:hover, input[type="submit"]:hover {
+    background-color: #0f0;
+    color: #000;
+  }
+  
+  #output, table {
+    border: 1px solid #0f0;
+    padding: 20px;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    white-space: pre-wrap;
+  }
