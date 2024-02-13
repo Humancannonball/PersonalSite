@@ -7,7 +7,15 @@
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
 </head>
 <body>
-  <h1>Turing Machine</h1>
+  <section id="description">
+    <a href="/">Back to main page</a>
+    <h2>About The Turing Machine</h2>
+    <p>A Turing Machine is a fundamental concept in Computer Science, representing a theoretical device that manipulates symbols on a strip of tape according to a table of rules.</p>
+    <p>Despite its simplicity, a Turing Machine can be adapted to simulate the logic of any computer algorithm, and is used as a reference model for computational complexity.</p>
+    <p>The machine operates on an infinite memory tape divided into discrete "cells". The machine positions its "head" over a cell and "reads" or "writes" information based on a set of predetermined rules. It can move the head to the left or the right.</p>
+    <p>On this website, you can simulate the operation of a Turing Machine. Enter the initial state of the tape, the set of rules, and the number of steps to simulate, then click "Submit" to see the results.</p>
+    <p>Check out this website, which inspired my implementation: <a href="https://morphett.info/turing/turing.html">Turing Machine</a></p>
+</section>
   <form action="/runTuring" method="get">
     <label for="tape">Tape:</label><br>
     <input type="text" id="tape" name="tape"><br>
@@ -15,9 +23,9 @@
     <textarea id="program" name="program" rows="4" cols="50"></textarea><br>
     <input type="submit" value="Run">
   </form>
+  <div id="output"></div>
   <button id="binaryPalindromeChecker">Load Binary Palindrome Checker</button>
   <button id="binaryToDecimalConverter">Load Binary to Decimal Converter</button>
-  <div id="output"></div>
   <script src="js/turing.js"></script>
 </body>
 </html>
