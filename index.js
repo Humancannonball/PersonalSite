@@ -4,7 +4,7 @@ const exec = util.promisify(require('child_process').exec);
 const java = require('java');
 const path = require('path');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = process.env.PORT || 8080;
 
 java.options.push('--enable-preview');
 java.classpath.push('TuringMachine.jar');
