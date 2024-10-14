@@ -13,22 +13,14 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Azure Container Registry Login
-        uses: Azure/docker-login@v1
-        with:
-          username: ${{ secrets.AZURE_CLIENT_ID }}  # Service Principal App ID
-          password: ${{ secrets.AZURE_CLIENT_SECRET }}  # Service Principal Password
-          login-server: ${{ secrets.AZURE_REGISTRY_NAME }}.azurecr.io
+      - name: Log in to Azure
+        run: |
+          echo "${{ secrets.AZURE_CLIENT_SECRET }}" | docker login ${{ secrets.AZURE_REGISTRY_NAME }}.azurecr.io -u ${{ secrets.AZURE_CLIENT_ID }} --password-stdin
 
-      - name: Azure Container Registry Build
-        uses: Azure/acr-build@v1
-        with:
-          service_principal: ${{ secrets.AZURE_CLIENT_ID }}
-          service_principal_password: ${{ secrets.AZURE_CLIENT_SECRET }}  
-          tenant: ${{ secrets.AZURE_TENANT_ID }}  
-          registry: ${{ secrets.AZURE_REGISTRY_NAME }}  # ACR name without .azurecr.io
-          repository: personalsite  # Name of your Docker image
-          image: personalsite  # Optional: Docker image name
-          tag: latest  # Optional: Docker image tag
-          folder: .  # Folder in the GitHub repo that holds the source
-          dockerfile: Dockerfile  # Location of the Dockerfile
+      - name: Build Docker image
+        run: |
+          docker build -t ${{ secrets.AZURE_REGISTRY_NAME }}.azurecr.io/personalsite:latest .
+
+      - name: Push Docker image to ACR
+        run: |
+          docker push ${{ secrets.AZURE_REGISTRY_NAME }}.azurecr.io/personalsite:latest
