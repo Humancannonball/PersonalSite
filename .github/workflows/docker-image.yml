@@ -27,8 +27,8 @@ jobs:
           service_principal_password: ${{ secrets.AZURE_CLIENT_SECRET }}  
           tenant: ${{ secrets.AZURE_TENANT_ID }}  
           registry: ${{ secrets.AZURE_REGISTRY_NAME }}  # ACR name without .azurecr.io
-          repository: <personalsite>  # Name of your Docker image
-          image: <personalsite>  # Optional: Docker image name
+          repository: personalsite  # Name of your Docker image
+          image: personalsite  # Optional: Docker image name
           tag: latest  # Optional: Docker image tag
           folder: .  # Folder in the GitHub repo that holds the source
           dockerfile: Dockerfile  # Location of the Dockerfile
