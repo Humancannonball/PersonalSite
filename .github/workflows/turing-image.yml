@@ -2,6 +2,9 @@ name: Build and Push Turing Docker Image
 
 on:
   push:
+    branches:
+      - main
+      - master
     paths:
       - 'turing-service/**'
   workflow_dispatch:

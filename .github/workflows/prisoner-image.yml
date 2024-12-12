@@ -2,6 +2,9 @@ name: Build and Push Prisoner Docker Image
 
 on:
   push:
+    branches:
+      - main
+      - master
     paths:
       - 'prisoner-service/**'
   workflow_dispatch:
