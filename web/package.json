@@ -1,0 +1,17 @@
+{
+    "name": "web",
+    "version": "1.0.0",
+    "description": "Web frontend for my personal site",
+    "main": "index.js",
+    "scripts": {
+      "start": "node index.js"
+    },
+    "author": "Mark Mikula",
+    "license": "ISC",
+    "dependencies": {
+      "axios": "^1.5.0",
+      "express": "^4.18.2",
+      "express-fileupload": "^1.4.0",
+      "dotenv": "^16.3.1"
+    }
+  }
