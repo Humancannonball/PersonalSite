@@ -10,7 +10,6 @@ This repository contains the source code and configurations for my personal webs
 - **Features:**
   - Interactive simulations of the Iterated Prisoner's Dilemma and a Turing Machine.
   - Detailed sections about my projects, skills, passions, and contact information.
-  - Image upload functionality with an image gallery.
 
 ### Microservices
 
@@ -31,4 +30,3 @@ This repository contains the source code and configurations for my personal webs
 - **Deployment (in separate repository):**
   - Uses Terraform for provisioning Azure Kubernetes Service (AKS) clusters.
   - Kubernetes manifests manage the deployment of services.
-

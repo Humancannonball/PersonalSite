@@ -1,16 +1,16 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-const fileUpload = require('express-fileupload');
+// const fileUpload = require('express-fileupload'); // Removed
 const app = express();
 const port = process.env.PORT || 8080;
 
-// Enable file uploads
-app.use(fileUpload());
+// // Enable file uploads
+// app.use(fileUpload()); // Removed
 app.use(express.json());
 
 // Serve static files
-app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
+// app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Removed
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
@@ -24,21 +24,21 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'main.html'));
 });
 
-// Handle image upload
-app.post('/upload', async (req, res) => {
-  if (!req.files || Object.keys(req.files).length === 0) {
-    return res.status(400).send('No files were uploaded.');
-  }
+// // Handle image upload
+// app.post('/upload', async (req, res) => {
+//   if (!req.files || Object.keys(req.files).length === 0) {
+//     return res.status(400).send('No files were uploaded.');
+//   }
 
-  const image = req.files.image;
-  const uploadPath = path.join(__dirname, 'uploads', image.name);
+//   const image = req.files.image;
+//   const uploadPath = path.join(__dirname, 'uploads', image.name);
 
-  // Save the file to the server
-  image.mv(uploadPath, (err) => {
-    if (err) return res.status(500).send(err);
-    res.redirect('/');
-  });
-});
+//   // Save the file to the server
+//   image.mv(uploadPath, (err) => {
+//     if (err) return res.status(500).send(err);
+//     res.redirect('/');
+//   });
+// });
 
 // Serve the prisoner and turing pages
 app.get('/prisoner', (req, res) => {
