@@ -1,6 +1,6 @@
 # Personal Website and Microservices Project
 
-This repository contains the source code and configurations for my personal website and its associated microservices. The project demonstrates my expertise in web development, microservices architecture, containerization, and cloud deployment using Kubernetes and Terraform.
+This repository contains the source code and configurations for my personal website and its associated microservices. The project demonstrates my expertise in web development, microservices architecture, containerization.
 
 ## Overview
 
