@@ -1,6 +1,6 @@
 # Personal Website and Microservices Project
 
-This repository contains the source code and configurations for my personal website and its associated microservices. The project demonstrates my expertise in web development, microservices architecture, containerization.
+This repository contains the source code and configurations for my personal website and its associated microservices. The project demonstrates my expertise in web development, microservices architecture, containerization. The website is down right now, since I am rewriting it to use microservices.
 
 ## Overview
 
