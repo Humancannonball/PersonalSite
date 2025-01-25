@@ -1,0 +1,17 @@
+version: '3.8'
+
+services:
+  web:
+    build: ./web
+    ports:
+      - "8080:8080"
+
+  prisoner-service:
+    build: ./prisoner-service
+    ports:
+      - "5000:5000"
+
+  turing-service:
+    build: ./turing-service
+    ports:
+      - "5001:5001"
