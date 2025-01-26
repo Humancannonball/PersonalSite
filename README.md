@@ -30,3 +30,28 @@ This repository contains the source code and configurations for my personal webs
 - **Deployment (in separate repository):**
   - Uses Terraform for provisioning Azure Kubernetes Service (AKS) clusters.
   - Kubernetes manifests manage the deployment of services.
+
+## Local Development Environment Setup
+
+### Prerequisites
+
+- Docker
+- Docker Compose
+
+### Steps to Build and Run the Containers Locally
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/Humancannonball/PersonalSite.git
+   cd PersonalSite
+   ```
+
+2. Build and start the containers using Docker Compose:
+   ```sh
+   docker-compose up --build
+   ```
+
+3. Access the services:
+   - Web frontend: `http://localhost:8080`
+   - Prisoner service: `http://localhost:5000`
+   - Turing service: `http://localhost:5001`
