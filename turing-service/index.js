@@ -1,22 +1,18 @@
 const express = require('express');
-const app = express();
+const path = require('path');
 const { spawn } = require('child_process');
+const app = express(); // Added
+
 
 app.use(express.json());
 
-app.post('/run', (req, res) => {
+app.post('/runTuring', (req, res) => {
   const { tape, program } = req.body;
-
-  const process = spawn('java', ['-jar', 'TuringMachine.jar', tape, program]);
-
+  const jarPath = path.join(__dirname, 'TuringMachine.jar');
+  const process = spawn('java', ['--enable-preview', '-cp', jarPath, 'TuringMachineDriver', tape, program]);
   let output = '';
-  process.stdout.on('data', (data) => {
-    output += data.toString();
-  });
-
-  process.stderr.on('data', (data) => {
-    console.error(`Error: ${data}`);
-  });
+  process.stdout.on('data', (data) => { output += data.toString(); });
+  process.stderr.on('data', (data) => { console.error(`Error: ${data}`); });
 
   process.on('close', (code) => {
     if (code === 0) {

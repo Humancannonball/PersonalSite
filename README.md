@@ -1,57 +1,156 @@
 # Personal Website and Microservices Project
 
-This repository contains the source code and configurations for my personal website and its associated microservices. The project demonstrates my expertise in web development, microservices architecture, containerization. The website is down right now, since I am rewriting it to use microservices.
+Welcome to my Personal Website and Microservices Project repository. This project showcases a modern web application architecture utilizing microservices to simulate complex computational models like the Turing Machine and the Iterated Prisoner's Dilemma. 
+
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Features](#features)
+- [Technologies Used](#technologies-used)
+- [Setup and Installation](#setup-and-installation)
+- [Usage](#usage)
+- [Contributing](#contributing)
+- [License](#license)
 
 ## Overview
 
-### Web Frontend (`web/`)
+This project comprises a web frontend and several microservices, each responsible for different computational simulations. The architecture is designed to be scalable, maintainable, and easy to deploy using Docker.
 
-- **Description:** A Node.js application serving as my personal website.
-- **Features:**
-  - Interactive simulations of the Iterated Prisoner's Dilemma and a Turing Machine.
-  - Detailed sections about my projects, skills, passions, and contact information.
+## Architecture
 
-### Microservices
+### Components
 
-- **Prisoner Service (`prisoner-service/`):**
-  - Runs a Java application simulating the Iterated Prisoner's Dilemma.
-  - Provides an API endpoint for the frontend to fetch simulation results.
-- **Turing Service (`turing-service/`):**
-  - Runs a Java application simulating a Turing Machine.
-  - Provides an API endpoint for the frontend to execute Turing Machine programs.
+1. **Web Frontend (`web/`)**
+    - Serves the main website and user interface.
+    - Allows users to interact with different simulations.
+    - Built with Node.js and Express.js.
 
-### Infrastructure
+2. **Microservices**
+    - **Prisoner Service (`prisoner-service/`):**
+        - Simulates the Iterated Prisoner's Dilemma.
+        - Built with Java.
+        - Exposes API endpoints for simulation execution.
+    - **Turing Service (`turing-service/`):**
+        - Simulates a Turing Machine.
+        - Built with Java.
+        - Exposes API endpoints for running Turing Machine programs.
 
-- **Dockerization:**
-  - Each component has a Dockerfile for containerization.
-  - Optimized multi-stage builds for efficient image sizes.
-- **Continuous Integration (`.github/workflows/`):**
-  - GitHub Actions workflows automate building and pushing Docker images to Azure Container Registry (ACR).
-- **Deployment (in separate repository):**
-  - Uses Terraform for provisioning Azure Kubernetes Service (AKS) clusters.
-  - Kubernetes manifests manage the deployment of services.
+3. **Infrastructure**
+    - **Dockerization:**
+        - Each component has its own Dockerfile for containerization.
+        - Utilizes multi-stage builds for optimized image sizes.
+    - **Continuous Integration (`.github/workflows/`):**
+        - GitHub Actions workflows automate building and pushing Docker images to Azure Container Registry (ACR).
 
-## Local Development Environment Setup
+## Features
+
+- **Interactive Simulations:**
+    - **Turing Machine Simulator:**
+        - Input custom tape and program configurations.
+        - Visualize the Turing Machine's operations step-by-step.
+    - **Iterated Prisoner's Dilemma Simulator:**
+        - Configure game parameters and strategies.
+        - Analyze outcomes based on different strategies.
+
+- **Microservices Architecture:**
+    - Decoupled services for better scalability and maintainability.
+    - Each service can be developed, deployed, and scaled independently.
+
+- **Containerization:**
+    - Docker containers ensure consistent environments across development and production.
+    - Simplifies deployment and scaling using Kubernetes.
+
+- **Continuous Integration and Deployment:**
+    - Automated workflows for building, testing, and deploying services.
+    - Ensures rapid and reliable delivery of updates.
+
+## Technologies Used
+
+- **Frontend:**
+    - HTML, CSS, JavaScript
+    - jQuery
+    - Express.js
+
+- **Backend Services:**
+    - Java
+    - Express.js (Node.js)
+
+- **DevOps:**
+    - Docker
+    - Docker Compose
+    - Kubernetes
+    - GitHub Actions
+
+- **Cloud Services:**
+    - Azure Container Registry (ACR)
+    - Azure Kubernetes Service (AKS)
+
+## Setup and Installation
 
 ### Prerequisites
 
-- Docker
-- Docker Compose
+- **Local Development:**
+    - [Docker](https://www.docker.com/get-started)
+    - [Docker Compose](https://docs.docker.com/compose/install/)
+    - [Git](https://git-scm.com/downloads)
 
-### Steps to Build and Run the Containers Locally
+### Steps to Build and Run Locally
 
-1. Clone the repository:
-   ```sh
-   git clone https://github.com/Humancannonball/PersonalSite.git
-   cd PersonalSite
-   ```
+1. **Clone the Repository:**
+    ```sh
+    git clone https://github.com/Humancannonball/PersonalSite.git
+    cd PersonalSite
+    ```
 
-2. Build and start the containers using Docker Compose:
-   ```sh
-   docker-compose up --build
-   ```
+2. **Build and Start Services with Docker Compose:**
+    ```sh
+    docker-compose up --build
+    ```
 
-3. Access the services:
-   - Web frontend: `http://localhost:8080`
-   - Prisoner service: `http://localhost:5000`
-   - Turing service: `http://localhost:5001`
+3. **Access the Application:**
+    - **Web Frontend:** `http://localhost:8080`
+
+## Usage
+
+1. **Access the Web Frontend:**
+    - Navigate to `http://localhost:8080` in your browser.
+
+2. **Run Simulations:**
+    - **Turing Machine:**
+        - Input the initial tape and program.
+        - Submit to visualize the machine's operation.
+    - **Iterated Prisoner's Dilemma:**
+        - Configure game parameters.
+        - Run simulations to analyze strategies.
+
+3. **View Results:**
+    - Simulation outputs are displayed on the frontend interface.
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. **Fork the Repository**
+2. **Create a Feature Branch**
+    ```sh
+    git checkout -b feature/YourFeature
+    ```
+3. **Commit Your Changes**
+    ```sh
+    git commit -m "Add your feature"
+    ```
+4. **Push to the Branch**
+    ```sh
+    git push origin feature/YourFeature
+    ```
+5. **Open a Pull Request**
+
+## License
+
+This project is licensed under the [MIT License](LICENSE).
+
+## Acknowledgements
+
+- Inspired by the [Turing Machine simulation](https://morphett.info/turing/turing.html).
+- Utilizes open-source technologies and frameworks.

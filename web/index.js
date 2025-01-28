@@ -64,7 +64,7 @@ app.get('/runGameTheory', async (req, res) => {
 // Proxy to turing-service
 app.post('/runTuring', async (req, res) => {
   try {
-    const response = await axios.post('http://turing-service:5001/run', req.body);
+    const response = await axios.post('http://turing-service:5001/runTuring', req.body);
     res.send(response.data);
   } catch (error) {
     res.status(500).send({ error: error.toString() });

@@ -1,5 +1,5 @@
 # Use an official Node.js image as the build stage
-FROM node:20 AS build
+FROM docker.io/node:20-alpine AS build
 
 # Set working directory
 WORKDIR /app
@@ -13,8 +13,8 @@ RUN npm ci
 # Copy application source code
 COPY . .
 
-# Use an official OpenJDK image as the runtime stage
-FROM eclipse-temurin:17-jre
+# Use an official Eclipse Temurin Java 21 runtime image
+FROM docker.io/eclipse-temurin:21-jre
 
 # Set working directory
 WORKDIR /app

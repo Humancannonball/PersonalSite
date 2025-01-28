@@ -1,5 +1,5 @@
 # Use the latest Node.js LTS version
-FROM node:20-alpine
+FROM docker.io/node:20-alpine
 
 # Set working directory
 WORKDIR /usr/src/app
