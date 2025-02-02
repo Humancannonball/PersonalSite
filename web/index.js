@@ -36,11 +36,12 @@ app.get('/turing', (req, res) => {
 // Proxy to prisoner-service
 app.get('/runGameTheory', async (req, res) => {
   try {
-    const response = await axios.get('http://prisoner-service:5000/run', {
+    const response = await axios.get(`${process.env.PRISONER_SERVICE_URL}/run`, {
       params: req.query,
     });
     res.send(response.data);
   } catch (error) {
+    console.error('Prisoner service error:', error);
     res.status(500).send({ error: error.toString() });
   }
 });
@@ -48,12 +49,14 @@ app.get('/runGameTheory', async (req, res) => {
 // Proxy to turing-service
 app.post('/runTuring', async (req, res) => {
   try {
-    const response = await axios.post('http://turing-service:5001/runTuring', req.body);
+    const response = await axios.post(`${process.env.TURING_SERVICE_URL}/runTuring`, req.body);
     res.send(response.data);
   } catch (error) {
+    console.error('Turing service error:', error);
     res.status(500).send({ error: error.toString() });
   }
 });
+
 
 app.listen(port, () => {
   console.log(`Web Service listening on port ${port}`);
