@@ -1,104 +1,150 @@
+/* Base styling */
 body {
-  font: 1.125rem/1.6 'Roboto', sans-serif;
-  background-color: #c86fe6;
-  color: #333;
-  padding: 1.25rem;
+  font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  font-size: 16px;
+  background-color: #121212; /* changed from white */
+  color: #d4af37; /* updated for better contrast against dark bg */
   margin: 0;
+  padding: 1rem;
 }
 
+/* Updated Header & Footer styling with dark-green background and gold accents */
 header, footer {
-  background: #673AB7;
-  color: #fff;
-  padding: 1.25rem;
+  background: rgba(0, 30, 0, 0.8); /* dark green with opacity */
+  border-bottom: 1px solid #d4af37; /* gold border */
+  color: #d4af37; /* gold text */
+  padding: 1rem;
   text-align: center;
-  margin-bottom: 1.25rem;
-  box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1);
-}
-.contact-container {
-  display: flex;
-  justify-content: space-between;
-  align-items: start;
+  position: relative;
+  z-index: 1;
 }
 
-.contact-info {
-  flex: 1;
-}
-
-.profile-photo img {
-  width: 12.5rem; 
-  height: auto;
-}
-#projects a {
-  color: #9b54e2;
-  text-decoration: none;
-  border-bottom: 0.125rem solid #9b54e2;
-  transition: 0.3s;
-}
-#skills ul {
-  list-style-type: disc;
-  padding-left: 1.5rem;
-}
-
-#projects a:hover {
-  color: #4CAF50;
-  border-bottom: 0.125rem solid #4CAF50;
-}
-
-h1, h2 {
-  margin: 0;
-  font-size: 2em;
-}
-
-p, section {
-  margin-bottom: 1.25rem;
-}
-
-ul {
-  list-style: none;
-  padding: 0;
-}
-
-a {
-  color: #333;
-  text-decoration: none;
-  transition: color 0.3s ease;
-}
-
-a:hover {
-  color: #673AB7;
-}
-
+/* Updated Sections styling with dark-green background and gold accents */
 section {
-  padding: 1.25rem;
-  background: #FFF;
-  color: #333;
-  border-radius: 0.125rem;
-  box-shadow: 0 0.125rem 0.3125rem rgba(0,0,0,0.1);
-  transition: box-shadow 0.3s ease;
+  background: rgba(0, 30, 0, 0.8);
+  border: 1px solid #d4af37;
+  border-radius: 0.25rem;
+  margin-bottom: 1rem;
+  padding: 1rem;
+  box-shadow: 0 1px 3px rgba(210, 180, 140, 0.3); /* subtle gold shadow */
+  position: relative;
+  z-index: 1;
 }
 
-
-section:hover {
-  box-shadow: 0 0.3125rem 0.9375rem rgba(0,0,0,0.2);
+/* Updated Typography */
+h1, h2 {
+  margin-top: 0;
+  color: #d4af37; /* gold for headings */
+}
+p {
+  line-height: 1.6;
+  color: #a3d977; /* light, matrix-green tone for paragraphs */
+}
+a {
+  color: #d4af37; /* gold links */
+  text-decoration: none;
+  transition: color 0.3s;
+}
+a:hover {
+  color: #b5d334; /* slightly different gold/green on hover */
 }
 
+/* Flex container layout */
 .flex-container {
   display: flex;
-  justify-content: flex-start;
+  flex-wrap: wrap;
+  gap: 1rem;
+  flex-direction: column;
 }
-
-#projects, #skills {
-  flex-basis: 45%; /* Adjust as needed */
-  margin-right: 1.875rem; /* Adjust as needed */
+#projects, 
+#skills, 
+#passions, 
+#contacts, 
+#image-upload {
+  flex: 1 1 calc(50% - 1rem);
 }
-
-@media (max-width: 37.5rem) {
-  body {
-    font-size: 1rem;
-    padding: 0.625rem;
+@media (max-width: 768px) {
+  #projects, 
+  #skills, 
+  #passions, 
+  #contacts, 
+  #image-upload {
+    flex: 1 1 100%;
   }
-
-  h1, h2 {
-    font-size: 1.5em;
-  }
 }
+
+/* Updated Skills section styling */
+#skills {
+  background: rgba(0, 50, 0, 0.85); /* slightly different dark-green */
+  border: 1px solid #f0c674; /* gold accent */
+  color: #f0c674; /* gold text */
+}
+
+/* Updated Contacts section styling for better readability */
+#contacts {
+  background: rgba(0, 30, 0, 0.9);
+  border: 1px solid #d4af37;
+  color: #d4af37;
+}
+#contacts a {
+  color: #ff0; /* bright yellow for links */
+  text-decoration: underline;
+}
+
+/* Images and form elements */
+img {
+  max-width: 100%;
+  height: auto;
+}
+input, button {
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 0.25rem;
+}
+button {
+  background: #007bff;
+  color: #fff;
+  cursor: pointer;
+  transition: background-color 0.3s;
+}
+button:hover {
+  background: #0056b3;
+}
+
+/* New style for moving background canvas */
+#hacker-bg {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 0; /* raised from -1 */
+  background: black;
+  pointer-events: none;
+}
+
+/* Golden green matrix styling for Turing page form elements */
+form[action="/runTuring"] input,
+form[action="/runTuring"] textarea {
+  background: rgba(0, 50, 0, 0.85);
+  border: 1px solid #f0c674;
+  color: #f0c674;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 0.5rem;
+}
+form[action="/runTuring"] button,
+form[action="/runTuring"] input[type="submit"] {
+  background: rgba(0, 50, 0, 0.85);
+  border: 1px solid #f0c674;
+  color: #f0c674;
+  font-family: 'Courier New', Courier, monospace;
+  padding: 0.5rem 1rem;
+  transition: background-color 0.3s, color 0.3s;
+}
+form[action="/runTuring"] button:hover,
+form[action="/runTuring"] input[type="submit"]:hover {
+  background: #f0c674;
+  color: #0e0;
+}
+
+/* ...existing code (if any extra components) ... */

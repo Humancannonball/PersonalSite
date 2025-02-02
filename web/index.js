@@ -24,22 +24,6 @@ app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'main.html'));
 });
 
-// // Handle image upload
-// app.post('/upload', async (req, res) => {
-//   if (!req.files || Object.keys(req.files).length === 0) {
-//     return res.status(400).send('No files were uploaded.');
-//   }
-
-//   const image = req.files.image;
-//   const uploadPath = path.join(__dirname, 'uploads', image.name);
-
-//   // Save the file to the server
-//   image.mv(uploadPath, (err) => {
-//     if (err) return res.status(500).send(err);
-//     res.redirect('/');
-//   });
-// });
-
 // Serve the prisoner and turing pages
 app.get('/prisoner', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'prisoner.html'));

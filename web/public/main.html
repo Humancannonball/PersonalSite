@@ -5,6 +5,8 @@
     <link rel="stylesheet" type="text/css" href="/css/main.css">
 </head>
 <body>
+  <!-- Added moving background canvas -->
+  <canvas id="hacker-bg"></canvas>
   <header>
     <h1>Mark Mikula - Software Engineer</h1>
     <p>Welcome to my personal website! Here, you can explore my projects, learn about my skills and passions, and find ways to contact me. Enjoy your stay!</p>
@@ -55,15 +57,6 @@
     </div>
   </section>
 
-  <section id="image-upload">
-    <h2>Upload an Image</h2>
-    <form action="/upload" method="post" enctype="multipart/form-data">
-      <input type="file" name="image" accept="image/*">
-      <input type="submit" value="Upload Image">
-    </form>
-    <div id="image-gallery"></div>
-  </section>
-
-  <script src="/main.js"></script>
+  <script src="/js/main.js"></script>
 </body>
 </html>
