@@ -9,10 +9,6 @@ const params = [
   { name: 'Abusive', description: 'This player always defects.' },
   { name: 'param20', description: 'This is a custom player.' }
 ];
-const form = document.getElementById('paramForm');
-const submitBtn = document.getElementById('submitBtn');
-
-// Generate the checkboxes and insert them before the submit button
 params.forEach(param => {
   const checkbox = document.createElement('input');
   checkbox.type = 'checkbox';
@@ -25,9 +21,9 @@ params.forEach(param => {
   label.title = param.description; // Add the tooltip text
   label.appendChild(document.createTextNode(param.name));
 
-  form.insertBefore(checkbox, submitBtn);
-  form.insertBefore(label, submitBtn);
-  form.insertBefore(document.createElement('br'), submitBtn);
+  document.getElementById('paramForm').appendChild(checkbox);
+  document.getElementById('paramForm').appendChild(label);
+  document.getElementById('paramForm').appendChild(document.createElement('br'));
 });
 // Function to sort the table
 function sortTable(table, columnIndex, isAlphabetical) {
