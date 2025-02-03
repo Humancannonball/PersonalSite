@@ -41,7 +41,7 @@ p {
   color: #a3d977; /* light, matrix-green tone for paragraphs */
 }
 a {
-  color: #d4af37; /* gold links */
+  color: #ff0; /* gold links */
   text-decoration: none;
   transition: color 0.3s;
 }
@@ -146,5 +146,3 @@ form[action="/runTuring"] input[type="submit"]:hover {
   background: #f0c674;
   color: #0e0;
 }
-
-/* ...existing code (if any extra components) ... */

@@ -88,3 +88,10 @@ body {
     overflow-wrap: break-word;
     white-space: pre-wrap;
   }
+
+  #submitBtn {
+    margin-top: 20px;
+    padding: 10px 20px;
+    font-size: 1em;
+    cursor: pointer;
+  }
