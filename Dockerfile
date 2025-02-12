@@ -52,13 +52,4 @@ EXPOSE 5000
 EXPOSE 5001
 
 # Start the web service
-WORKDIR /web
-CMD ["node", "index.js"]
-
-# Start the prisoner-service
-WORKDIR /prisoner-service
-CMD ["node", "index.js"]
-
-# Start the turing-service
-WORKDIR /turing-service
-CMD ["node", "index.js"]
+CMD sh -c "cd /web && node index.js & cd /prisoner-service && node index.js & cd /turing-service && node index.js & wait"
