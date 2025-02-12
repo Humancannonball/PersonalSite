@@ -54,3 +54,11 @@ EXPOSE 5001
 # Start the web service
 WORKDIR /web
 CMD ["node", "index.js"]
+
+# Start the prisoner-service
+WORKDIR /prisoner-service
+CMD ["node", "index.js"]
+
+# Start the turing-service
+WORKDIR /turing-service
+CMD ["node", "index.js"]

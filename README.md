@@ -108,6 +108,8 @@ This project comprises a web frontend and several microservices, each responsibl
 
 3. **Access the Application:**
     - **Web Frontend:** `http://localhost:8080`
+    - **Prisoner Service:** `http://localhost:5000`
+    - **Turing Service:** `http://localhost:5001`
 
 ## Usage
 
