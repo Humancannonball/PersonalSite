@@ -1,0 +1,47 @@
+{
+    "Motorcycle": {
+      "weekday": {
+        "start": 8,
+        "end": 17,
+        "rate": 0.5
+      },
+      "friday": {
+        "start": 8,
+        "end": 20,
+        "rate": 1.5
+      },
+      "saturday": {
+        "rate": 2
+      }
+    },
+    "Car": {
+      "weekday": {
+        "start": 8,
+        "end": 17,
+        "rate": 1
+      },
+      "friday": {
+        "start": 8,
+        "end": 20,
+        "rate": 2
+      },
+      "saturday": {
+        "rate": 4
+      }
+    },
+    "Bus/Truck": {
+      "weekday": {
+        "start": 8,
+        "end": 17,
+        "rate": 2
+      },
+      "friday": {
+        "start": 8,
+        "end": 20,
+        "rate": 3.5
+      },
+      "saturday": {
+        "rate": 5
+      }
+    }
+  }
