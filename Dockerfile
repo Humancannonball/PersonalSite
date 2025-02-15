@@ -24,7 +24,14 @@ RUN npm ci
 COPY turing-service ./
 RUN npm run build
 
-# Stage 4: Runtime image
+# Stage 4: Build digitizer-service
+FROM docker.io/node:20-alpine AS digitizer-build
+WORKDIR /digitizer-service
+COPY digitizer-service/package.json ./
+RUN npm install
+COPY digitizer-service ./
+
+# Stage 5: Runtime image
 FROM docker.io/eclipse-temurin:21-jre
 
 # Set working directories for each service
@@ -34,6 +41,8 @@ WORKDIR /prisoner-service
 COPY --from=prisoner-build /prisoner-service ./
 WORKDIR /turing-service
 COPY --from=turing-build /turing-service ./
+WORKDIR /digitizer-service
+COPY --from=digitizer-build /digitizer-service ./
 
 # Install Node.js runtime
 RUN apt-get update && \
@@ -50,6 +59,11 @@ COPY turing-service/TuringMachine.jar /turing-service/
 EXPOSE 8080
 EXPOSE 5000
 EXPOSE 5001
+EXPOSE 5002
 
-# Start the web service
-CMD sh -c "cd /web && node index.js & cd /prisoner-service && node index.js & cd /turing-service && node index.js & wait"
+# Start all services
+CMD sh -c "cd /web && node index.js & \
+           cd /prisoner-service && node index.js & \
+           cd /turing-service && node index.js & \
+           cd /digitizer-service && node index.js & \
+           wait"

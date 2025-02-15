@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Graph Digitizer</title>
+    <link rel="stylesheet" type="text/css" href="/css/main.css">
+    <link rel="stylesheet" type="text/css" href="/css/digitizer.css">
+</head>
+<body>
+    <a href="/">Back to main page</a>
+    <h2>Graph Digitizer</h2>
+    
+    <div class="digitizer-container">
+        <div class="upload-section">
+            <input type="file" id="graphUpload" accept="image/*">
+            <div id="preview"></div>
+        </div>
+        
+        <div class="settings-section">
+            <label>Scale Type:</label>
+            <select id="scaleType">
+                <option value="linear">Linear</option>
+                <option value="logarithmic">Logarithmic</option>
+            </select>
+            
+            <label>Precision:</label>
+            <input type="number" id="precision" value="2" min="0" max="10">
+        </div>
+        
+        <button id="processGraph">Extract Data Points</button>
+        
+        <div id="results">
+            <pre id="output"></pre>
+            <button id="download" style="display:none">Download Data</button>
+        </div>
+    </div>
+    
+    <script src="/js/digitizer.js"></script>
+</body>
+</html>

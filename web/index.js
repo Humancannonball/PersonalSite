@@ -22,7 +22,7 @@ require('dotenv').config();
 // Set default values for environment variables if they are undefined
 const PRISONER_SERVICE_URL = process.env.PRISONER_SERVICE_URL || 'http://localhost:5000';
 const TURING_SERVICE_URL = process.env.TURING_SERVICE_URL || 'http://localhost:5001';
-
+const DIGITIZER_SERVICE_URL = process.env.DIGITIZER_SERVICE_URL || 'http://localhost:5002';
 // Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'main.html'));
@@ -60,7 +60,21 @@ app.post('/runTuring', async (req, res) => {
     res.status(500).send({ error: error.toString() });
   }
 });
+// Serve the digitizer page
+app.get('/digitizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'digitizer.html'));
+});
 
+// Handle graph processing
+app.post('/processGraph', async (req, res) => {
+  try {
+    const response = await axios.post(`${DIGITIZER_SERVICE_URL}/process`, req.body);
+    res.send(response.data);
+  } catch (error) {
+    console.error('Digitizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Web Service listening on port ${port}`);
