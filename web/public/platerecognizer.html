@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Plate Recognizer</title>
+    <style>
+      body {
+        background-color: #f5f5f5;
+        font-family: 'Courier New', Courier, monospace;
+        font-size: 16px;
+        color: #333;
+      }
+      h1 {
+        color: #8a2be2;
+        text-align: center;
+        margin-top: 50px;
+      }
+      form {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        margin-top: 50px;
+      }
+      label {
+        color: #8a2be2;
+        margin-bottom: 10px;
+      }
+      input[type="file"] {
+        margin-bottom: 20px;
+        font-size: 18px;
+        background-color: #8a2be2;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        color: #d1d1e0;
+        text-shadow: 1px 1px #4b0082;
+      }
+      input[type="file"]::before {
+        content: 'Select an image';
+        color: #d1d1e0;
+        text-shadow: 1px 1px #4b0082;
+      }
+      button[type="submit"] {
+        background-color: #8a2be2;
+        border: none;
+        padding: 10px;
+        border-radius: 5px;
+        color: #d1d1e0;
+        text-shadow: 1px 1px #4b0082;
+        font-size: 24px;
+        margin-top: 20px;
+      }
+      button[type="submit"]:hover {
+        background-color: #4b0082;
+        cursor: pointer;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+      }
+      li {
+        background-color: #f2f2f2;
+        padding: 10px;
+        border-radius: 5px;
+        display: inline-block;
+        margin-right: 10px;
+        font-size: 24px;
+        text-shadow: 1px 1px #4b0082;
+      }
+      li:last-child {
+        margin-right: 0;
+      
+      }
+      
+      .fee {
+        font-size: 24px;
+        font-weight: bold;
+        color: #007acc;
+        text-shadow: 1px 1px #4b0082;
+        text-align: center;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="app">
+      <h1>Plate Recognizer</h1>
+      <form @submit.prevent="submitForm">
+        <label for="image1">Upload a photo a of car which enters the parking:</label>
+        <input type="file" id="image1" name="image1" accept="image/*" required>
+
+        <label for="image2">Upload a photo of the same car which leaves the parking:</label>
+        <input type="file" id="image2" name="image2" accept="image/*" required>
+
+        <button type="submit">Analyze</button>
+      </form>
+      <div v-if="response" class="response">
+        <p class="fee">{{ response }}</p>
+      </div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
+    <script>
+      new Vue({
+        el: '#app',
+        data: {
+          response: '',
+        },
+        methods: {
+            submitForm() {
+            const form = document.querySelector('form');
+            const formData = new FormData(form);
+            fetch('/upload', {
+              method: 'POST',
+              body: formData,
+            })
+              .then(response => response.text())
+              .then(text => {
+                this.response = text;
+                this.resetForm();
+              })
+              .catch(error => {
+                console.log(error);
+              });
+          },
+          resetForm() {
+            const form = document.querySelector('form');
+            form.reset();
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
