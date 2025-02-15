@@ -75,7 +75,24 @@ app.post('/processGraph', async (req, res) => {
     res.status(500).send({ error: error.toString() });
   }
 });
+// Add with other env variables
+const PLATERECOGNIZER_SERVICE_URL = process.env.PLATERECOGNIZER_SERVICE_URL || 'http://localhost:3000';
 
+// Add with other routes
+app.get('/platerecognizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'platerecognizer.html'));
+});
+
+// Add proxy route for plate recognition
+app.post('/calculateParkingFee', async (req, res) => {
+  try {
+    const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/calculateParkingFee`, req.body);
+    res.send(response.data);
+  } catch (error) {
+    console.error('Plate recognizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  }
+});
 app.listen(port, () => {
   console.log(`Web Service listening on port ${port}`);
 });

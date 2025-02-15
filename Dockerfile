@@ -31,6 +31,13 @@ COPY digitizer-service/package.json ./
 RUN npm install
 COPY digitizer-service ./
 
+FROM docker.io/node:20-alpine AS platerecognizer-build
+WORKDIR /platerecognizer-service
+COPY platerecognizer-service/package*.json ./
+RUN npm ci
+COPY platerecognizer-service ./
+RUN mkdir uploads
+
 # Stage 5: Runtime image
 FROM docker.io/eclipse-temurin:21-jre
 
@@ -43,6 +50,9 @@ WORKDIR /turing-service
 COPY --from=turing-build /turing-service ./
 WORKDIR /digitizer-service
 COPY --from=digitizer-build /digitizer-service ./
+WORKDIR /platerecognizer-service
+COPY --from=platerecognizer-build /platerecognizer-service ./
+
 
 # Install Node.js runtime
 RUN apt-get update && \
@@ -60,10 +70,12 @@ EXPOSE 8080
 EXPOSE 5000
 EXPOSE 5001
 EXPOSE 5002
+EXPOSE 3000
 
-# Start all services
+# Update CMD to include platerecognizer service
 CMD sh -c "cd /web && node index.js & \
            cd /prisoner-service && node index.js & \
            cd /turing-service && node index.js & \
            cd /digitizer-service && node index.js & \
+           cd /platerecognizer-service && node app.js & \
            wait"
