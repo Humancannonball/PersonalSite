@@ -1,16 +1,12 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-// const fileUpload = require('express-fileupload'); // Removed
 const app = express();
 const port = process.env.PORT || 8080;
 
-// // Enable file uploads
-// app.use(fileUpload()); // Removed
 app.use(express.json());
 
 // Serve static files
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Removed
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
@@ -23,6 +19,8 @@ require('dotenv').config();
 const PRISONER_SERVICE_URL = process.env.PRISONER_SERVICE_URL || 'http://localhost:5000';
 const TURING_SERVICE_URL = process.env.TURING_SERVICE_URL || 'http://localhost:5001';
 const DIGITIZER_SERVICE_URL = process.env.DIGITIZER_SERVICE_URL || 'http://localhost:5002';
+const PLATERECOGNIZER_SERVICE_URL = process.env.PLATERECOGNIZER_SERVICE_URL || 'http://localhost:5003';
+
 // Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'main.html'));
@@ -60,6 +58,7 @@ app.post('/runTuring', async (req, res) => {
     res.status(500).send({ error: error.toString() });
   }
 });
+
 // Serve the digitizer page
 app.get('/digitizer', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'digitizer.html'));
@@ -72,6 +71,28 @@ app.post('/processGraph', async (req, res) => {
     res.send(response.data);
   } catch (error) {
     console.error('Digitizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  }
+});
+
+// Serve the platerecognizer page
+app.get('/platerecognizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'platerecognizer.html'));
+});
+
+// Handle image upload for platerecognizer-service
+app.post('/upload', async (req, res) => {
+  try {
+    const formData = new FormData();
+    formData.append('image1', req.files.image1.data, req.files.image1.name);
+    formData.append('image2', req.files.image2.data, req.files.image2.name);
+
+    const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/upload`, formData, {
+      headers: formData.getHeaders(),
+    });
+    res.send(response.data);
+  } catch (error) {
+    console.error('Platerecognizer service error:', error);
     res.status(500).send({ error: error.toString() });
   }
 });

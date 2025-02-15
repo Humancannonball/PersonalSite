@@ -10,7 +10,7 @@ const upload = multer({ dest: 'uploads/' });
 app.use(express.json());
 
 app.post('/process', upload.single('image'), (req, res) => {
-  const { settings } = req.body;
+  const settings = JSON.parse(req.body.settings);
   const imagePath = req.file.path;
 
   // Mock response with sample data points
@@ -31,7 +31,7 @@ app.post('/process', upload.single('image'), (req, res) => {
       }
     });
 
-    res.send({ points: mockPoints });
+    res.send({ points: mockPoints, settings: settings });
   }, 2000);
 });
 
