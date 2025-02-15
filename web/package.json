@@ -4,7 +4,8 @@
   "description": "Web frontend for my personal site",
   "main": "index.js",
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "npm ci"
   },
   "author": "Mark Mikula",
   "license": "ISC",

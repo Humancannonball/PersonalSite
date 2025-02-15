@@ -35,11 +35,14 @@ This project comprises a web frontend and several microservices, each responsibl
         - Simulates a Turing Machine.
         - Built with Java.
         - Exposes API endpoints for running Turing Machine programs.
+    - **Digitizer Service (`digitizer-service/`):**
+        - Processes uploaded images to extract data points.
+        - Built with Node.js.
+        - Exposes API endpoints for image processing.
 
 3. **Infrastructure**
     - **Dockerization:**
-        - Each component has its own Dockerfile for containerization.
-        - Utilizes multi-stage builds for optimized image sizes.
+        - All components are included in a single Dockerfile using multi-stage builds.
     - **Continuous Integration (`.github/workflows/`):**
         - GitHub Actions workflows automate building and pushing Docker images to Azure Container Registry (ACR).
 
@@ -52,6 +55,9 @@ This project comprises a web frontend and several microservices, each responsibl
     - **Iterated Prisoner's Dilemma Simulator:**
         - Configure game parameters and strategies.
         - Analyze outcomes based on different strategies.
+    - **Graph Digitizer:**
+        - Upload graph images.
+        - Extract data points from the images.
 
 - **Microservices Architecture:**
     - Decoupled services for better scalability and maintainability.
@@ -78,7 +84,6 @@ This project comprises a web frontend and several microservices, each responsibl
 
 - **DevOps:**
     - Docker
-    - Docker Compose
     - Kubernetes
     - GitHub Actions
 
@@ -92,7 +97,6 @@ This project comprises a web frontend and several microservices, each responsibl
 
 - **Local Development:**
     - [Docker](https://www.docker.com/get-started)
-    - [Docker Compose](https://docs.docker.com/compose/install/)
     - [Git](https://git-scm.com/downloads)
 
 ### Steps to Build and Run Locally
@@ -103,13 +107,17 @@ This project comprises a web frontend and several microservices, each responsibl
     cd PersonalSite
     ```
 
-2. **Build and Start Services with Docker Compose:**
+2. **Build and Start Services with Docker:**
     ```sh
-    docker-compose up --build
+    docker build -t personal-site .
+    docker run -p 8080:8080 -p 5000:5000 -p 5001:5001 -p 5002:5002 personal-site
     ```
 
 3. **Access the Application:**
     - **Web Frontend:** `http://localhost:8080`
+    - **Prisoner Service:** `http://localhost:5000`
+    - **Turing Service:** `http://localhost:5001`
+    - **Digitizer Service:** `http://localhost:5002`
 
 ## Usage
 
@@ -123,6 +131,9 @@ This project comprises a web frontend and several microservices, each responsibl
     - **Iterated Prisoner's Dilemma:**
         - Configure game parameters.
         - Run simulations to analyze strategies.
+    - **Graph Digitizer:**
+        - Upload a graph image.
+        - Extract data points from the image.
 
 3. **View Results:**
     - Simulation outputs are displayed on the frontend interface.

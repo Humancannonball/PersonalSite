@@ -19,6 +19,10 @@ app.use('/', express.static(path.join(__dirname, 'public')));
 // Load environment variables
 require('dotenv').config();
 
+// Set default values for environment variables if they are undefined
+const PRISONER_SERVICE_URL = process.env.PRISONER_SERVICE_URL || 'http://localhost:5000';
+const TURING_SERVICE_URL = process.env.TURING_SERVICE_URL || 'http://localhost:5001';
+const DIGITIZER_SERVICE_URL = process.env.DIGITIZER_SERVICE_URL || 'http://localhost:5002';
 // Serve the main page
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'main.html'));
@@ -36,7 +40,7 @@ app.get('/turing', (req, res) => {
 // Proxy to prisoner-service
 app.get('/runGameTheory', async (req, res) => {
   try {
-    const response = await axios.get(`${process.env.PRISONER_SERVICE_URL}/run`, {
+    const response = await axios.get(`${PRISONER_SERVICE_URL}/run`, {
       params: req.query,
     });
     res.send(response.data);
@@ -49,14 +53,28 @@ app.get('/runGameTheory', async (req, res) => {
 // Proxy to turing-service
 app.post('/runTuring', async (req, res) => {
   try {
-    const response = await axios.post(`${process.env.TURING_SERVICE_URL}/runTuring`, req.body);
+    const response = await axios.post(`${TURING_SERVICE_URL}/runTuring`, req.body);
     res.send(response.data);
   } catch (error) {
     console.error('Turing service error:', error);
     res.status(500).send({ error: error.toString() });
   }
 });
+// Serve the digitizer page
+app.get('/digitizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'digitizer.html'));
+});
 
+// Handle graph processing
+app.post('/processGraph', async (req, res) => {
+  try {
+    const response = await axios.post(`${DIGITIZER_SERVICE_URL}/process`, req.body);
+    res.send(response.data);
+  } catch (error) {
+    console.error('Digitizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  }
+});
 
 app.listen(port, () => {
   console.log(`Web Service listening on port ${port}`);
