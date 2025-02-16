@@ -21,7 +21,7 @@ const config = require('./config.json');
           rate = config[vehicleType].friday.rate;
           fee += rate * 12;
         } else if (dayOfWeek === 6) {
-          rate = config[vehicleType].weekend.rate;
+          rate = config[vehicleType].saturday.rate;
             fee += rate * 24;
         } else if (dayOfWeek === 0) {
             rate = 0;
@@ -46,7 +46,7 @@ const config = require('./config.json');
       fee += rate * 12;
         }
     } else if (dayOfWeek === 6) {
-      rate = config[vehicleType].weekend.rate;
+      rate = config[vehicleType].saturday.rate;
         fee += rate * hours;
     } else if (dayOfWeek === 0) {
         rate = 0;

@@ -1,204 +1,166 @@
-# Plate Recognizer GUI
+# Plate Recognizer Service
 
-Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vue.js, and PostgreSQL to provide a smart parking solution. It utilizes the [Plate Recognizer API](https://platerecognizer.com) to detect vehicle license plates from images and calculates parking fees based on vehicle type and parking duration.
+This service is designed to be integrated into a larger web application for recognizing license plates from images. It provides an API for processing images and calculating parking fees based on vehicle type and parking duration.
 
 ## Features
 
-- **License Plate Recognition**: Automatically detects and matches license plates upon entry and exit.
-- **Vehicle Type Identification**: Determines the type of vehicle for accurate fee calculation.
-- **Dynamic Fee Calculation**: Calculates parking fees based on time, vehicle type, and day of the week.
-- **Database Integration**: Stores parking data in a PostgreSQL database for record-keeping.
-- **User-Friendly Interface**: Provides a simple web interface for uploading images.
+-   **License Plate Recognition**: Automatically detects and matches license plates upon entry and exit.
+-   **Vehicle Type Identification**: Determines the type of vehicle for accurate fee calculation.
+-   **Dynamic Fee Calculation**: Calculates parking fees based on time, vehicle type, and day of the week.
+-   **Database Integration**: Stores parking data in a PostgreSQL database for record-keeping.
 
 ## Prerequisites
 
-- **Node.js** (version 12 or later)
-- **PostgreSQL Server**
-- **Plate Recognizer API Token**: Obtain from [Plate Recognizer](https://platerecognizer.com)
+-   Node.js (version 12 or later)
+-   PostgreSQL Server
+-   Plate Recognizer API Token: Obtain from [Plate Recognizer](https://platerecognizer.com)
 
 ## Installation
 
-1. **Clone the Repository**
+1.  **Clone the Repository**
 
-   ```bash
-   git clone https://github.com/yourusername/SmartParking.git
-   cd SmartParking
-   ```
+    ```bash
+    git clone https://github.com/yourusername/SmartParking.git
+    cd SmartParking
+    ```
 
-2. **Install Dependencies**
+2.  **Install Dependencies**
 
-   ```bash
-   npm install
-   ```
+    ```bash
+    npm install
+    ```
 
-   This installs the required packages: `axios`, `express`, `multer`, `pg`, and others.
+    This installs the required packages: `axios`, `express`, `multer`, `pg`, and others.
 
-3. **Configure the Plate Recognizer API Token**
+3.  **Configure the Plate Recognizer API Token**
 
-   - Open `platerecognizer.js`.
-   - Replace `***your token***` with your actual API token:
+    -   Open `platerecognizer.js`.
+    -   Replace `***your token***` with your actual API token:
 
-     ```javascript
-     // ...existing code...
-     'Authorization': 'Token YOUR_API_TOKEN_HERE'
-     // ...existing code...
-     ```
+        ```javascript
+        // ...existing code...
+        'Authorization': 'Token YOUR_API_TOKEN_HERE'
+        // ...existing code...
+        ```
 
-4. **Set Up PostgreSQL Database**
+4.  **Set Up PostgreSQL Database**
 
-   - **Start PostgreSQL Server** and ensure it's running.
-   - **Update Database Credentials**
+    -   **Start PostgreSQL Server** and ensure it's running.
+    -   **Update Database Credentials**
 
-     In `pg.js`, update the PostgreSQL connection details:
+        In `pg.js`, update the PostgreSQL connection details:
 
-     ```javascript
-     // filepath: /home/mark/SmartParking/pg.js
-     // ...existing code...
-     const pool = new Pool({
-       connectionString: process.env.DATABASE_URL,
-       ssl: {
-         rejectUnauthorized: false
-       }
-     });
-     // ...existing code...
-     ```
+        ```javascript
+        // filepath: /home/mark/SmartParking/pg.js
+        // ...existing code...
+        const pool = new Pool({
+            connectionString: process.env.DATABASE_URL,
+            ssl: {
+                rejectUnauthorized: false
+            }
+        });
+        // ...existing code...
+        ```
 
-   - **Create Database and Table**
+    -   **Create Database and Table**
 
-     Log into PostgreSQL and run:
+        Log into PostgreSQL and run:
 
-     ```sql
-     CREATE DATABASE SmartParking;
+        ```sql
+        CREATE DATABASE SmartParking;
 
-     \c SmartParking;
+        \c SmartParking;
 
-     CREATE TABLE PlateData (
-       id SERIAL PRIMARY KEY,
-       fee DECIMAL(10,2) NOT NULL,
-       duration INT NOT NULL,
-       hours INT NOT NULL,
-       vehicleType VARCHAR(255) NOT NULL,
-       timestamp1 TIMESTAMP NOT NULL,
-       timestamp2 TIMESTAMP NOT NULL
-     );
-     ```
+        CREATE TABLE PlateData (
+            id SERIAL PRIMARY KEY,
+            fee DECIMAL(10,2) NOT NULL,
+            duration INT NOT NULL,
+            hours INT NOT NULL,
+            vehicleType VARCHAR(255) NOT NULL,
+            timestamp1 TIMESTAMP NOT NULL,
+            timestamp2 TIMESTAMP NOT NULL
+        );
+        ```
 
 ## Configuration
 
-- **Update Rate Settings**
+-   **Update Rate Settings**
 
-  In `config.json`, ensure the rate settings match your requirements:
+    In `config.json`, ensure the rate settings match your requirements:
 
-  ```json
-  {
-    "Motorcycle": {
-      "weekday": {
-        "start": 8,
-        "end": 17,
-        "rate": 0.5
-      },
-      // ...existing code...
-    },
-    // ...existing code...
-  }
-  ```
+    ```json
+    {
+        "Motorcycle": {
+            "weekday": {
+                "start": 8,
+                "end": 17,
+                "rate": 0.5
+            },
+            // ...existing code...
+        },
+        // ...existing code...
+    }
+    ```
 
 ## Usage
 
-1. **Start the Application**
+This service is designed to be consumed by other applications.  Refer to the API documentation for details on how to integrate with this service.
 
-   ```bash
-   node app.js
-   ```
+## API Endpoints
 
-   The server will start on `http://localhost:3000`.
-
-2. **Access the Web Interface**
-
-   Open a browser and navigate to `http://localhost:3000`.
-
-3. **Upload Vehicle Images**
-
-   - Upload an image of the vehicle entering the parking.
-   - Upload an image of the same vehicle exiting the parking.
-
-4. **View Parking Fee**
-
-   After processing, the application displays the calculated parking fee based on the provided images.
+-   **/calculateParkingFee**: Accepts two images (entry and exit) and returns the calculated parking fee.
 
 ## Project Structure
 
-- **`app.js`**
-
-  Main server file handling routes and server configuration.
-
-- **`public/index.html`**
-
-  Front-end interface built with Vue.js for image uploads and displaying results.
-
-- **`platerecognizer.js`**
-
-  Module for interacting with the Plate Recognizer API.
-
-- **`fee.js`**
-
-  Contains logic for calculating parking fees.
-
-- **`pg.js`**
-
-  Handles PostgreSQL database connections and operations.
-
-- **`config.json`**
-
-  Configuration file for parking rates and schedules.
-
-- **`uploads/`**
-
-  Directory where uploaded images are temporarily stored.
+-   **`app.js`**: Main server file handling routes and server configuration.
+-   **`platerecognizer.js`**: Module for interacting with the Plate Recognizer API.
+-   **`fee.js`**: Contains logic for calculating parking fees.
+-   **`pg.js`**: Handles PostgreSQL database connections and operations.
+-   **`config.json`**: Configuration file for parking rates and schedules.
+-   **`uploads/`**: Directory where uploaded images are temporarily stored.
 
 ## Dependencies
 
-- **axios**
-- **express**
-- **multer**
-- **pg**
-- **vue.js**
+-   axios
+-   express
+-   multer
+-   pg
 
 Install all dependencies using `npm install`.
 
 ## Important Notes
 
-- **API Rate Limits**
+-   **API Rate Limits**
 
-  The Plate Recognizer API has rate limits. Ensure you handle delays appropriately in `platerecognizer.js`:
+    The Plate Recognizer API has rate limits. Ensure you handle delays appropriately in `platerecognizer.js`:
 
-  ```javascript
-  // ...existing code...
-  // Wait for 1 second between API calls
-  await new Promise(resolve => setTimeout(resolve, 1000));
-  // ...existing code...
-  ```
+    ```javascript
+    // ...existing code...
+    // Wait for 1 second between API calls
+    await new Promise(resolve => setTimeout(resolve, 1000));
+    // ...existing code...
+    ```
 
-- **Error Handling**
+-   **Error Handling**
 
-  The application includes basic error handling. For production use, consider enhancing this to cover more edge cases.
+    The application includes basic error handling. For production use, consider enhancing this to cover more edge cases.
 
-- **Security**
+-   **Security**
 
-  - Keep your API token secure and do not expose it publicly.
-  - Validate and sanitize all inputs to prevent security vulnerabilities.
+    -   Keep your API token secure and do not expose it publicly.
+    -   Validate and sanitize all inputs to prevent security vulnerabilities.
 
 ## Future Improvements
 
-- **Dockerization**
+-   Dockerization
 
-  Containerize the application using Docker for easier deployment.
+    Containerize the application using Docker for easier deployment.
 
-- **Unit Tests**
+-   Unit Tests
 
-  Implement unit tests for critical functions.
+    Implement unit tests for critical functions.
 
-- **Logging**
+-   Logging
 
-  Add logging mechanisms to monitor application performance and errors.
+    Add logging mechanisms to monitor application performance and errors.
 

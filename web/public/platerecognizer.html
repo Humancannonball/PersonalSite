@@ -95,7 +95,7 @@
         <button type="submit">Analyze</button>
       </form>
       <div v-if="response" class="response">
-        <p class="fee">{{ response }}</p>
+        <p class="fee">Your parking fee is {{ response.fee }} for {{ response.duration }} day(s) and {{ response.hours }} hour(s).</p>
       </div>
     </div>
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
@@ -103,7 +103,7 @@
       new Vue({
         el: '#app',
         data: {
-          response: '',
+          response: null,
         },
         methods: {
             submitForm() {
@@ -113,9 +113,9 @@
               method: 'POST',
               body: formData,
             })
-              .then(response => response.text())
-              .then(text => {
-                this.response = text;
+              .then(response => response.json())
+              .then(data => {
+                this.response = data;
                 this.resetForm();
               })
               .catch(error => {

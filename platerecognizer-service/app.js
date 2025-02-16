@@ -41,18 +41,31 @@ app.use(express.static('public'));
 // Handle the POST request to the /calculateParkingFee route
 app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
   const { image1, image2 } = req.files;
+  // Check if files were uploaded
+  if (!image1 || !image2) {
+    return res.status(400).send('Please upload both images.');
+  }
   const paths = [image1[0].path, image2[0].path]
 
   try {
     const plateData = await savePlateData(paths[0], paths[1]); // Call the savePlateData function
-    const { vehicleType, timestamp1, timestamp2 } = plateData; // Destructure the plateData object
-    const { fee, duration, hours } = await calculateParkingFee(vehicleType, timestamp1, timestamp2); // For presentation purposes
+    const { vehicleType, timestamp1, timestamp2, fee, duration, hours } = plateData; // Destructure the plateData object
+    // const { fee, duration, hours } = await calculateParkingFee(vehicleType, timestamp1, timestamp2); // For presentation purposes
     console.log(fee, duration, hours);
-    saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2); // Fixed typo: typestamp -> timestamp
-    res.send(`Your parking fee is ${fee} for ${duration} day(s) and ${hours} hour(s).`);
+    // saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2); // Fixed typo: typestamp -> timestamp
+    res.send({ fee: fee, duration: duration, hours: hours });
 
   } catch (err) {
-    res.sendStatus(500);
+    console.error(err); // Log the error for debugging
+    res.status(500).send({ error: err.message }); // Send the error message to the client
+  } finally {
+    // Clean up uploaded files
+    if (image1 && image1[0] && fs.existsSync(image1[0].path)) {
+      fs.unlinkSync(image1[0].path);
+    }
+    if (image2 && image2[0] && fs.existsSync(image2[0].path)) {
+      fs.unlinkSync(image2[0].path);
+    }
   }
 });
 // Handle errors
@@ -60,6 +73,7 @@ app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
     res.status(400).send('Bad request');
   } else if (err) {
+    console.error(err);
     res.status(500).send('An error occurred while uploading the files');
   } else {
     next();

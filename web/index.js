@@ -2,6 +2,7 @@ const express = require('express');
 const axios = require('axios');
 const path = require('path');
 const multer = require('multer');
+const fs = require('fs');
 const app = express();
 const port = process.env.PORT || 8080;
 
@@ -95,8 +96,8 @@ const upload = multer({ storage: storage });
 app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
   try {
     const formData = new FormData();
-    formData.append('image1', req.files.image1[0].buffer, req.files.image1[0].originalname);
-    formData.append('image2', req.files.image2[0].buffer, req.files.image2[0].originalname);
+    formData.append('image1', fs.createReadStream(req.files.image1[0].path), req.files.image1[0].originalname);
+    formData.append('image2', fs.createReadStream(req.files.image2[0].path), req.files.image2[0].originalname);
 
     const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/calculateParkingFee`, formData, {
       headers: formData.getHeaders()
