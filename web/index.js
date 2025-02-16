@@ -81,7 +81,17 @@ app.get('/platerecognizer', (req, res) => {
 });
 
 // Add proxy route for plate recognition
-const upload = multer();
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const upload = multer({ storage: storage });
+
 app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
   try {
     const formData = new FormData();
