@@ -82,6 +82,103 @@ This service is designed to be integrated into a larger web application for reco
         );
         ```
 
+    ### Running PostgreSQL Locally
+
+    1.  **Install PostgreSQL:**
+
+        *   **On Debian/Ubuntu:**
+
+            ```bash
+            sudo apt-get update
+            sudo apt-get install postgresql postgresql-contrib
+            ```
+
+        *   **On macOS (using Homebrew):**
+
+            ```bash
+            brew install postgresql
+            ```
+
+        *   **On Windows:**
+
+            Download the installer from the [PostgreSQL website](https://www.postgresql.org/download/windows/) and follow the instructions.
+
+    2.  **Start PostgreSQL Server:**
+
+        *   **On Linux:**
+
+            ```bash
+            sudo systemctl start postgresql
+            ```
+
+        *   **On macOS:**
+
+            ```bash
+            brew services start postgresql
+            ```
+
+        *   **On Windows:**
+
+            The PostgreSQL service should start automatically after installation.  If not, you can start it from the Services application.
+
+    3.  **Access PostgreSQL:**
+
+        ```bash
+        sudo -u postgres psql
+        ```
+
+    ### Running PostgreSQL on Heroku
+
+    1.  **Create a Heroku Account:**
+
+        If you don't have one already, sign up for a free account at [Heroku](https://www.heroku.com/).
+
+    2.  **Install the Heroku CLI:**
+
+        Download and install the Heroku Command Line Interface (CLI) from the [Heroku website](https://devcenter.heroku.com/articles/heroku-cli).
+
+    3.  **Log in to Heroku:**
+
+        ```bash
+        heroku login
+        ```
+
+    4.  **Create a Heroku App:**
+
+        ```bash
+        heroku create your-app-name
+        ```
+
+        Replace `your-app-name` with a unique name for your application.
+
+    5.  **Add the Heroku Postgres Add-on:**
+
+        ```bash
+        heroku addons:create heroku-postgresql:hobby-dev
+        ```
+
+        This will provision a free-tier PostgreSQL database for your application.
+
+    6.  **Get the Database URL:**
+
+        ```bash
+        heroku config:get DATABASE_URL
+        ```
+
+        This command will output the connection string for your PostgreSQL database.  Use this value for the `DATABASE_URL` environment variable in your application.
+
+    7.  **Set the `DATABASE_URL` Configuration Variable:**
+
+        In your Heroku app's settings, add a config var called `DATABASE_URL` and set the value to the URL you obtained in the previous step.
+
+        Alternatively, you can set it via the CLI:
+
+        ```bash
+        heroku config:set DATABASE_URL="your_database_url"
+        ```
+
+        Replace `"your_database_url"` with the actual URL.
+
 ## Configuration
 
 -   **Update Rate Settings**
@@ -163,4 +260,3 @@ Install all dependencies using `npm install`.
 -   Logging
 
     Add logging mechanisms to monitor application performance and errors.
-
