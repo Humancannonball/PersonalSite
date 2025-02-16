@@ -1,16 +1,13 @@
 const express = require('express');
 const axios = require('axios');
 const path = require('path');
-// const fileUpload = require('express-fileupload'); // Removed
+const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 8080;
 
-// // Enable file uploads
-// app.use(fileUpload()); // Removed
 app.use(express.json());
 
 // Serve static files
-// app.use('/uploads', express.static(path.join(__dirname, 'uploads'))); // Removed
 app.use('/css', express.static(path.join(__dirname, 'public', 'css')));
 app.use('/js', express.static(path.join(__dirname, 'public', 'js')));
 app.use('/images', express.static(path.join(__dirname, 'public', 'images')));
@@ -72,6 +69,31 @@ app.post('/processGraph', async (req, res) => {
     res.send(response.data);
   } catch (error) {
     console.error('Digitizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  }
+});
+// Add with other env variables
+const PLATERECOGNIZER_SERVICE_URL = process.env.PLATERECOGNIZER_SERVICE_URL || 'http://localhost:5003';
+
+// Add with other routes
+app.get('/platerecognizer', (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'platerecognizer.html'));
+});
+
+// Add proxy route for plate recognition
+const upload = multer();
+app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
+  try {
+    const formData = new FormData();
+    formData.append('image1', req.files.image1[0].buffer, req.files.image1[0].originalname);
+    formData.append('image2', req.files.image2[0].buffer, req.files.image2[0].originalname);
+
+    const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/calculateParkingFee`, formData, {
+      headers: formData.getHeaders()
+    });
+    res.send(response.data);
+  } catch (error) {
+    console.error('Plate recognizer service error:', error);
     res.status(500).send({ error: error.toString() });
   }
 });
