@@ -3,7 +3,7 @@ const FormData = require('form-data');
 const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 const { calculateParkingFee } = require('./fee');
 
-const API_TOKEN = '***your token***';
+const API_TOKEN = process.env.PLATERECOGNIZER_API_TOKEN;
 
 async function getPlateData(imageBuffer) { // Get the plate data from the API
   const formData = new FormData();
