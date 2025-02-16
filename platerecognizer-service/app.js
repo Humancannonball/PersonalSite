@@ -8,12 +8,18 @@ const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 
 // Create an Express app
 const app = express();
-
+// Create a directory to store uploaded files
+const fs = require('fs');
+const uploadsDir = path.join(__dirname, 'uploads');
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
 // Configure the multer middleware for file uploads
 const upload = multer({
   storage: multer.diskStorage({
     destination: (req, file, cb) => {
-      cb(null, 'uploads/');
+      // Use the absolute path
+      cb(null, uploadsDir);
     },
     // Set the filename to the current date and time concatenated with the original name of the uploaded file
     filename: (req, file, cb) => {
