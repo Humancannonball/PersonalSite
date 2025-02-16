@@ -76,7 +76,7 @@ app.post('/processGraph', async (req, res) => {
   }
 });
 // Add with other env variables
-const PLATERECOGNIZER_SERVICE_URL = process.env.PLATERECOGNIZER_SERVICE_URL || 'http://localhost:3000';
+const PLATERECOGNIZER_SERVICE_URL = process.env.PLATERECOGNIZER_SERVICE_URL || 'http://localhost:5003';
 
 // Add with other routes
 app.get('/platerecognizer', (req, res) => {

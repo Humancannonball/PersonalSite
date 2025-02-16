@@ -70,7 +70,7 @@ EXPOSE 8080
 EXPOSE 5000
 EXPOSE 5001
 EXPOSE 5002
-EXPOSE 3000
+EXPOSE 5003
 
 # Update CMD to include platerecognizer service
 CMD sh -c "cd /web && node index.js & \
