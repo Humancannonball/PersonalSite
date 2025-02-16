@@ -42,7 +42,7 @@ app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 },
     const { vehicleType, timestamp1, timestamp2 } = plateData; // Destructure the plateData object
     const { fee, duration, hours } = await calculateParkingFee(vehicleType, timestamp1, timestamp2); // For presentation purposes
     console.log(fee, duration, hours);
-    saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2); // Fixed typo: typestamp -> timestamp
+    await saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2); // Fixed typo: typestamp -> timestamp
     res.send(`Your parking fee is ${fee} for ${duration} day(s) and ${hours} hour(s).`);
 
   } catch (err) {

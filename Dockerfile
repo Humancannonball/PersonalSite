@@ -31,6 +31,7 @@ COPY digitizer-service/package.json ./
 RUN npm install
 COPY digitizer-service ./
 
+# Stage 5: Build platerecognizer-service
 FROM docker.io/node:20-alpine AS platerecognizer-build
 WORKDIR /platerecognizer-service
 COPY platerecognizer-service/package*.json ./
@@ -38,7 +39,7 @@ RUN npm ci
 COPY platerecognizer-service ./
 RUN mkdir uploads
 
-# Stage 5: Runtime image
+# Stage 6: Runtime image
 FROM docker.io/eclipse-temurin:21-jre
 
 # Set working directories for each service
