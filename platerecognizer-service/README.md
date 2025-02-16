@@ -1,19 +1,19 @@
 # Plate Recognizer GUI
 
-Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vue.js, and MySQL to provide a smart parking solution. It utilizes the [Plate Recognizer API](https://platerecognizer.com) to detect vehicle license plates from images and calculates parking fees based on vehicle type and parking duration.
+Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vue.js, and PostgreSQL to provide a smart parking solution. It utilizes the [Plate Recognizer API](https://platerecognizer.com) to detect vehicle license plates from images and calculates parking fees based on vehicle type and parking duration.
 
 ## Features
 
 - **License Plate Recognition**: Automatically detects and matches license plates upon entry and exit.
 - **Vehicle Type Identification**: Determines the type of vehicle for accurate fee calculation.
 - **Dynamic Fee Calculation**: Calculates parking fees based on time, vehicle type, and day of the week.
-- **Database Integration**: Stores parking data in a MySQL database for record-keeping.
+- **Database Integration**: Stores parking data in a PostgreSQL database for record-keeping.
 - **User-Friendly Interface**: Provides a simple web interface for uploading images.
 
 ## Prerequisites
 
 - **Node.js** (version 12 or later)
-- **MySQL Server**
+- **PostgreSQL Server**
 - **Plate Recognizer API Token**: Obtain from [Plate Recognizer](https://platerecognizer.com)
 
 ## Installation
@@ -31,7 +31,7 @@ Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vu
    npm install
    ```
 
-   This installs the required packages: `axios`, `express`, `multer`, `mysql2`, and others.
+   This installs the required packages: `axios`, `express`, `multer`, `pg`, and others.
 
 3. **Configure the Plate Recognizer API Token**
 
@@ -44,44 +44,42 @@ Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vu
      // ...existing code...
      ```
 
-4. **Set Up MySQL Database**
+4. **Set Up PostgreSQL Database**
 
-   - **Start MySQL Server** and ensure it's running.
+   - **Start PostgreSQL Server** and ensure it's running.
    - **Update Database Credentials**
 
-     In `mysql.js`, update the MySQL connection details:
+     In `pg.js`, update the PostgreSQL connection details:
 
      ```javascript
-     // filepath: /home/mark/SmartParking/mysql.js
+     // filepath: /home/mark/SmartParking/pg.js
      // ...existing code...
-     const pool = mysql.createPool({
-       host: 'localhost',
-       user: 'root',
-       password: 'your_password',
-       database: 'SmartParking',
-       // ...existing code...
+     const pool = new Pool({
+       connectionString: process.env.DATABASE_URL,
+       ssl: {
+         rejectUnauthorized: false
+       }
      });
      // ...existing code...
      ```
 
    - **Create Database and Table**
 
-     Log into MySQL and run:
+     Log into PostgreSQL and run:
 
      ```sql
      CREATE DATABASE SmartParking;
 
-     USE SmartParking;
+     \c SmartParking;
 
      CREATE TABLE PlateData (
-       id INT NOT NULL AUTO_INCREMENT,
+       id SERIAL PRIMARY KEY,
        fee DECIMAL(10,2) NOT NULL,
        duration INT NOT NULL,
        hours INT NOT NULL,
        vehicleType VARCHAR(255) NOT NULL,
        timestamp1 TIMESTAMP NOT NULL,
-       timestamp2 TIMESTAMP NOT NULL,
-       PRIMARY KEY (id)
+       timestamp2 TIMESTAMP NOT NULL
      );
      ```
 
@@ -146,9 +144,9 @@ Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vu
 
   Contains logic for calculating parking fees.
 
-- **`mysql.js`**
+- **`pg.js`**
 
-  Handles MySQL database connections and operations.
+  Handles PostgreSQL database connections and operations.
 
 - **`config.json`**
 
@@ -163,7 +161,7 @@ Plate Recognizer GUI website is a cloud-native application that uses Node.js, Vu
 - **axios**
 - **express**
 - **multer**
-- **mysql2**
+- **pg**
 - **vue.js**
 
 Install all dependencies using `npm install`.

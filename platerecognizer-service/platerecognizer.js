@@ -1,8 +1,7 @@
 const axios = require('axios');
 const FormData = require('form-data');
 const fs = require('fs');
-const mysql = require('mysql2');
-
+const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 
 async function getPlateData(imagePath) { // Get the plate data from the API
   const formData = new FormData();
@@ -16,10 +15,7 @@ async function getPlateData(imagePath) { // Get the plate data from the API
   });
   console.log(response.data);
   return response.data;
-
 }
-
-
 
 async function savePlateData(imagePath1, imagePath2) {
   // Get the plate data
@@ -46,6 +42,8 @@ async function savePlateData(imagePath1, imagePath2) {
     vehicleType = 'Car';
   }
 
+  // Save the data to PostgreSQL
+  await saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2);
 
   // Return an object containing the variables
   return { vehicleType, timestamp1, timestamp2 };

@@ -5,7 +5,16 @@ const fs = require('fs');
 const app = express();
 const port = 5002;
 
-const upload = multer({ dest: 'uploads/' });
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, 'uploads/');
+  },
+  filename: (req, file, cb) => {
+    cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
+  }
+});
+
+const upload = multer({ storage: storage });
 
 app.use(express.json());
 
