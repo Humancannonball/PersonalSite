@@ -204,3 +204,68 @@ Install all dependencies using `npm install`.
 
   Add logging mechanisms to monitor application performance and errors.
 
+## Setting Up Heroku Postgres
+
+1. **Create a Heroku Account**
+
+   If you don't have a Heroku account, sign up at [Heroku](https://signup.heroku.com/).
+
+2. **Install the Heroku CLI**
+
+   Follow the instructions to install the Heroku CLI from [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli).
+
+3. **Login to Heroku**
+
+   ```bash
+   heroku login
+   ```
+
+4. **Create a New Heroku App**
+
+   ```bash
+   heroku create your-app-name
+   ```
+
+5. **Add Heroku Postgres to Your App**
+
+   ```bash
+   heroku addons:create heroku-postgresql:hobby-dev
+   ```
+
+6. **Retrieve the Database URL**
+
+   ```bash
+   heroku config:get DATABASE_URL
+   ```
+
+   This will output the `DATABASE_URL` which you will use in your application.
+
+7. **Set the DATABASE_URL Environment Variable**
+
+   In your Heroku app settings, set the `DATABASE_URL` environment variable to the value retrieved in the previous step.
+
+8. **Update Your Application to Use Heroku Postgres**
+
+   Ensure your application is configured to use the `DATABASE_URL` environment variable for the PostgreSQL connection.
+
+9. **Deploy Your Application to Heroku**
+
+   ```bash
+   git push heroku main
+   ```
+
+10. **Run Database Migrations**
+
+    If your application requires database migrations, run them using:
+
+    ```bash
+    heroku run npm run migrate
+    ```
+
+11. **Access Your Application**
+
+    Open your browser and navigate to your Heroku app URL.
+
+## Note
+
+Ensure the `DATABASE_URL` environment variable is set correctly in your Heroku app settings to avoid connection issues.
