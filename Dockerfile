@@ -72,6 +72,9 @@ EXPOSE 5001
 EXPOSE 5002
 EXPOSE 5003
 
+# Set environment variable for Plate Recognizer API token
+ENV PLATERECOGNIZER_API_TOKEN=your_token_here
+
 # Update CMD to include platerecognizer service
 CMD sh -c "cd /web && node index.js & \
            cd /prisoner-service && node index.js & \
