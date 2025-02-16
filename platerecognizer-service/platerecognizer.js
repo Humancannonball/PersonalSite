@@ -1,18 +1,20 @@
 const axios = require('axios');
 const FormData = require('form-data');
-const fs = require('fs');
 const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 const { calculateParkingFee } = require('./fee');
 
 const API_TOKEN = '***your token***';
 
-async function getPlateData(imagePath) { // Get the plate data from the API
+async function getPlateData(imageBuffer) { // Get the plate data from the API
   const formData = new FormData();
-  formData.append('upload', fs.createReadStream(imagePath));
+  formData.append('upload', imageBuffer, {
+    filename: 'image.jpg',
+    contentType: 'image/jpeg'
+  });
 
   const response = await axios.post('https://api.platerecognizer.com/v1/plate-reader/', formData, {
     headers: {
-      'Content-Type': 'multipart/form-data',
+      ...formData.getHeaders(),
       'Authorization': `Token ${API_TOKEN}`
     }
   });
@@ -20,12 +22,12 @@ async function getPlateData(imagePath) { // Get the plate data from the API
   return response.data;
 }
 
-async function savePlateData(imagePath1, imagePath2) {
+async function savePlateData(imageBuffer1, imageBuffer2) {
   // Get the plate data
-  const plateData1 = await getPlateData(imagePath1);
+  const plateData1 = await getPlateData(imageBuffer1);
   // Wait for 1 second, because the API has a limit of 1 request per second
   await new Promise(resolve => setTimeout(resolve, 1000));
-  const plateData2 = await getPlateData(imagePath2);
+  const plateData2 = await getPlateData(imageBuffer2);
   // if the plate data is empty, or is not equal in both cases, return error
   if (!plateData1 || !plateData2 || plateData1.results[0].plate !== plateData2.results[0].plate) {
     throw new Error('Plate data is empty or not equal');

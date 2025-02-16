@@ -5,27 +5,12 @@ const { savePlateData } = require('./platerecognizer');
 const { calculateParkingFee } = require('./fee');
 const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 
-
 // Create an Express app
 const app = express();
-// Create a directory to store uploaded files
-const fs = require('fs');
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
-}
+
 // Configure the multer middleware for file uploads
 const upload = multer({
-  storage: multer.diskStorage({
-    destination: (req, file, cb) => {
-      // Use the absolute path
-      cb(null, uploadsDir);
-    },
-    // Set the filename to the current date and time concatenated with the original name of the uploaded file
-    filename: (req, file, cb) => {
-      cb(null, `${file.fieldname}-${Date.now()}${path.extname(file.originalname)}`);
-    }
-  }),
+  storage: multer.memoryStorage(), // Use memory storage instead of disk storage
   // Only allow images to be uploaded
   fileFilter: (req, file, cb) => {
     if (file.mimetype.startsWith('image/')) {
@@ -45,29 +30,20 @@ app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 },
   if (!image1 || !image2) {
     return res.status(400).send('Please upload both images.');
   }
-  const paths = [image1[0].path, image2[0].path]
+  const buffers = [image1[0].buffer, image2[0].buffer];
 
   try {
-    const plateData = await savePlateData(paths[0], paths[1]); // Call the savePlateData function
+    const plateData = await savePlateData(buffers[0], buffers[1]); // Call the savePlateData function
     const { vehicleType, timestamp1, timestamp2, fee, duration, hours } = plateData; // Destructure the plateData object
-    // const { fee, duration, hours } = await calculateParkingFee(vehicleType, timestamp1, timestamp2); // For presentation purposes
     console.log(fee, duration, hours);
-    // saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2); // Fixed typo: typestamp -> timestamp
     res.send({ fee: fee, duration: duration, hours: hours });
 
   } catch (err) {
     console.error(err); // Log the error for debugging
     res.status(500).send({ error: err.message }); // Send the error message to the client
-  } finally {
-    // Clean up uploaded files
-    if (image1 && image1[0] && fs.existsSync(image1[0].path)) {
-      fs.unlinkSync(image1[0].path);
-    }
-    if (image2 && image2[0] && fs.existsSync(image2[0].path)) {
-      fs.unlinkSync(image2[0].path);
-    }
   }
 });
+
 // Handle errors
 app.use((err, req, res, next) => {
   if (err instanceof multer.MulterError) {
