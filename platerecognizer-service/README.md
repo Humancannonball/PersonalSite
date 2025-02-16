@@ -65,20 +65,19 @@ This service is designed to be integrated into a larger web application for reco
     -   **Create Database and Table**
 
         Log into PostgreSQL and run:
-
         ```sql
-        CREATE DATABASE SmartParking;
+        CREATE DATABASE "SmartParking";
 
-        \c SmartParking;
+        \c "SmartParking";
 
         CREATE TABLE PlateData (
-            id SERIAL PRIMARY KEY,
-            fee DECIMAL(10,2) NOT NULL,
-            duration INT NOT NULL,
-            hours INT NOT NULL,
-            vehicleType VARCHAR(255) NOT NULL,
-            timestamp1 TIMESTAMP NOT NULL,
-            timestamp2 TIMESTAMP NOT NULL
+          id SERIAL PRIMARY KEY,
+          fee DECIMAL(10,2) NOT NULL,
+          duration INT NOT NULL,
+          hours INT NOT NULL,
+          vehicleType VARCHAR(255) NOT NULL,
+          timestamp1 TIMESTAMP NOT NULL,
+          timestamp2 TIMESTAMP NOT NULL
         );
         ```
 
