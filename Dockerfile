@@ -34,7 +34,7 @@ COPY digitizer-service ./
 FROM docker.io/node:20-alpine AS platerecognizer-build
 WORKDIR /platerecognizer-service
 COPY platerecognizer-service/package*.json ./
-RUN npm ci
+RUN npm install
 COPY platerecognizer-service ./
 RUN mkdir uploads
 
