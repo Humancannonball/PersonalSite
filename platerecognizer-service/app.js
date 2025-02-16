@@ -3,7 +3,7 @@ const multer = require('multer');
 const path = require('path');
 const { savePlateData } = require('./platerecognizer');
 const { calculateParkingFee } = require('./fee');
-const { saveData } = require('./mysql');
+const { saveData } = require('./pg'); // Updated import to use PostgreSQL
 
 
 // Create an Express app

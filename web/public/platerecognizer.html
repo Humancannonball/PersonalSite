@@ -109,7 +109,7 @@
             submitForm() {
             const form = document.querySelector('form');
             const formData = new FormData(form);
-            fetch('/upload', {
+            fetch('/calculateParkingFee', {
               method: 'POST',
               body: formData,
             })
