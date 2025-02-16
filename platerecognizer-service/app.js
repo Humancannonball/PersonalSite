@@ -32,8 +32,8 @@ const upload = multer({
 
 app.use(express.static('public'));
 
-// Handle the POST request to the /upload route
-app.post('/upload', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
+// Handle the POST request to the /calculateParkingFee route
+app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
   const { image1, image2 } = req.files;
   const paths = [image1[0].path, image2[0].path]
 
@@ -60,6 +60,6 @@ app.use((err, req, res, next) => {
   }
 });
 
-app.listen(3000, () => {
-  console.log('Server started on port 3000.');
+app.listen(5003, () => {
+  console.log('Server started on port 5003.');
 });
