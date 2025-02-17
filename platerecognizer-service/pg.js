@@ -3,9 +3,9 @@ const { Pool } = require('pg');
 // Create a connection pool
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
-  ssl: {
-    rejectUnauthorized: false
-  }
+  // ssl: {
+  //   rejectUnauthorized: false
+  // }
 });
 
 // Define a function to save the data to the PostgreSQL database
