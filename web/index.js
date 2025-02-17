@@ -4,6 +4,9 @@ const path = require('path');
 const multer = require('multer');
 const app = express();
 const port = process.env.PORT || 8080;
+const { Blob } = require('buffer'); // Import Blob from the buffer module
+const FormData = require('form-data'); // Import FormData from the form-data package
+const fs = require('fs');
 
 app.use(express.json());
 
@@ -88,8 +91,19 @@ const upload = multer({ storage: storage });
 app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 }, { name: 'image2', maxCount: 1 }]), async (req, res) => {
   try {
     const formData = new FormData();
-    formData.append('image1', req.files.image1[0].buffer, req.files.image1[0].originalname);
-    formData.append('image2', req.files.image2[0].buffer, req.files.image2[0].originalname);
+    // Convert the buffer to a Blob
+    const image1Buffer = req.files.image1[0].buffer;
+    const image2Buffer = req.files.image2[0].buffer;
+
+    // Create a temporary file for image1
+    const image1Path = path.join(__dirname, 'temp_image1.jpg');
+    fs.writeFileSync(image1Path, image1Buffer);
+    formData.append('image1', fs.createReadStream(image1Path), req.files.image1[0].originalname);
+
+    // Create a temporary file for image2
+    const image2Path = path.join(__dirname, 'temp_image2.jpg');
+    fs.writeFileSync(image2Path, image2Buffer);
+    formData.append('image2', fs.createReadStream(image2Path), req.files.image2[0].originalname);
 
     const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/calculateParkingFee`, formData, {
       headers: formData.getHeaders()
@@ -98,6 +112,10 @@ app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 },
   } catch (error) {
     console.error('Plate recognizer service error:', error);
     res.status(500).send({ error: error.toString() });
+  } finally {
+    // Clean up temporary files
+    fs.unlinkSync(path.join(__dirname, 'temp_image1.jpg'));
+    fs.unlinkSync(path.join(__dirname, 'temp_image2.jpg'));
   }
 });
 
