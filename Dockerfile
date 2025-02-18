@@ -41,6 +41,17 @@ RUN mkdir uploads
 # Stage 5: Runtime image
 FROM docker.io/eclipse-temurin:21-jre
 
+# Install Node.js runtime
+RUN apt-get update && \
+    apt-get install -y curl && \
+    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
+    apt-get install -y nodejs && \
+    rm -rf /var/lib/apt/lists/*
+
+# Copy JAR files for Java services
+COPY prisoner-service/GameTheory.jar /prisoner-service/
+COPY turing-service/TuringMachine.jar /turing-service/
+
 # Set working directories for each service
 WORKDIR /web
 COPY --from=web-build /web ./
@@ -53,17 +64,11 @@ COPY --from=digitizer-build /digitizer-service ./
 WORKDIR /platerecognizer-service
 COPY --from=platerecognizer-build /platerecognizer-service ./
 
+# Copy the entrypoint script
+COPY entrypoint.sh /entrypoint.sh
 
-# Install Node.js runtime
-RUN apt-get update && \
-    apt-get install -y curl && \
-    curl -fsSL https://deb.nodesource.com/setup_20.x | bash - && \
-    apt-get install -y nodejs && \
-    rm -rf /var/lib/apt/lists/*
-
-# Copy JAR files for Java services
-COPY prisoner-service/GameTheory.jar /prisoner-service/
-COPY turing-service/TuringMachine.jar /turing-service/
+# Make the entrypoint script executable
+RUN chmod +x /entrypoint.sh
 
 # Expose ports
 EXPOSE 8080
@@ -72,10 +77,5 @@ EXPOSE 5001
 EXPOSE 5002
 EXPOSE 5003
 
-# Update CMD to include platerecognizer service
-CMD sh -c "cd /web && node index.js & \
-           cd /prisoner-service && node index.js & \
-           cd /turing-service && node index.js & \
-           cd /digitizer-service && node index.js & \
-           cd /platerecognizer-service && node app.js & \
-           wait"
+# Run the entrypoint script
+ENTRYPOINT ["/entrypoint.sh"]
