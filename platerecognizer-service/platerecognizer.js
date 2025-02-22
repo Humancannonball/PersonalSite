@@ -1,11 +1,11 @@
 const axios = require('axios');
 const FormData = require('form-data');
-const { saveData } = require('./pg'); // Updated import to use PostgreSQL
+const { saveData } = require('./pg');
 const { calculateParkingFee } = require('./fee');
 
 const API_TOKEN = process.env.PLATERECOGNIZER_API_TOKEN;
 
-async function getPlateData(imageBuffer) { // Get the plate data from the API
+async function getPlateData(imageBuffer) {
   const formData = new FormData();
   formData.append('upload', imageBuffer, {
     filename: 'image.jpg',
@@ -28,11 +28,11 @@ async function savePlateData(imageBuffer1, imageBuffer2) {
   // Wait for 1 second, because the API has a limit of 1 request per second
   await new Promise(resolve => setTimeout(resolve, 1000));
   const plateData2 = await getPlateData(imageBuffer2);
-  
+
   // if the plate data is empty, or is not equal in both cases, return error
-  if (!plateData1?.results?.[0] || !plateData2?.results?.[0] || 
-      plateData1.results[0].plate !== plateData2.results[0].plate) {
-    throw new Error('Plate data is empty or not equal');
+  if (!plateData1?.results?.[0] || !plateData2?.results?.[0] ||
+    plateData1.results[0].plate !== plateData2.results[0].plate) {
+    throw new Error('License plates do not match or could not be read.');
   }
 
   // Get timestamps from the API response
@@ -40,38 +40,34 @@ async function savePlateData(imageBuffer1, imageBuffer2) {
   const timestamp2 = new Date(plateData2.timestamp);
 
   if (!timestamp1.getTime() || !timestamp2.getTime()) {
-    throw new Error('Invalid timestamps received from API');
+    throw new Error('Invalid timestamp from API.');
   }
 
   const score = plateData1.results[0].score;
-  if (score < 0.3) { //according to API documentation
-    throw new Error('Score is too low');
+  if (score < 0.3) {
+    throw new Error('Low confidence score for license plate.');
   }
 
-  const vehicleScore = plateData1.results[0].vehicle.score;
-  if (vehicleScore < 0.3) {
-    throw new Error('Vehicle type is undefined');
+  let vehicleType = 'Car'; // Default vehicle type
+
+  // Check if vehicle data exists and has a score
+  const vehicleData1 = plateData1.results[0].vehicle;
+  if (vehicleData1 && vehicleData1.score && vehicleData1.score >= 0.3) {
+    vehicleType = vehicleData1.type;
+    if (vehicleType === 'SUV') {
+      vehicleType = 'Car';
+    }
+  } else {
+    console.log('Vehicle data missing or low confidence, using default vehicle type: Car');
   }
 
-  let vehicleType = plateData1.results[0].vehicle.type;
-  if (vehicleType === 'SUV') { // According to the task
-    vehicleType = 'Car';
-  }
-
+  // Calculate the parking fee
   const { fee, duration, hours } = await calculateParkingFee(vehicleType, timestamp1, timestamp2);
 
-  // Add debug logging
-  console.log('Data before saving:', {
-    fee, duration, hours, vehicleType,
-    timestamp1: timestamp1.toISOString(),
-    timestamp2: timestamp2.toISOString()
-  });
-
-  // Save the data to PostgreSQL
+  // Save the data to the database
   await saveData(fee, duration, hours, vehicleType, timestamp1, timestamp2);
 
-  // Return an object containing the variables
-  return { vehicleType, timestamp1, timestamp2, fee, duration, hours };
+  return { fee, duration, hours, plateData1, plateData2 };
 }
 
 module.exports = {

@@ -8,6 +8,7 @@ This service is designed to be integrated into a larger web application for reco
 -   **Vehicle Type Identification**: Determines the type of vehicle for accurate fee calculation.
 -   **Dynamic Fee Calculation**: Calculates parking fees based on time, vehicle type, and day of the week.
 -   **Database Integration**: Stores parking data in a PostgreSQL database for record-keeping.
+-   **Single Image Analysis**: Analyzes a single image and returns the raw data from the Plate Recognizer API.
 
 ## Prerequisites
 
@@ -204,7 +205,8 @@ This service is designed to be consumed by other applications.  Refer to the API
 
 ## API Endpoints
 
--   **/calculateParkingFee**: Accepts two images (entry and exit) and returns the calculated parking fee.
+-   **/calculateParkingFee**: Accepts two images (entry and exit) and returns the calculated parking fee, along with the raw data from the Plate Recognizer API for both images.
+-   **/analyzePlate**: Accepts a single image and returns the raw data from the Plate Recognizer API.
 
 ## Project Structure
 

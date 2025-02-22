@@ -80,51 +80,193 @@
         text-shadow: 1px 1px #4b0082;
         text-align: center;
       }
+      .data-display {
+        margin-top: 20px;
+        padding: 10px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        background-color: #fff;
+      }
+      .image-selector {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: center;
+        margin-top: 20px;
+      }
+      .image-selector img {
+        width: 150px; /* Increased width */
+        height: 90px; /* Increased height */
+        margin: 5px;
+        border: 2px solid transparent;
+        cursor: pointer;
+      }
+      .image-selector img.selected {
+        border-color: #8a2be2;
+      }
     </style>
   </head>
   <body>
     <div id="app">
       <h1>Plate Recognizer</h1>
-      <form @submit.prevent="submitForm">
-        <label for="image1">Upload a photo a of car which enters the parking:</label>
-        <input type="file" id="image1" name="image1" accept="image/*" required>
 
-        <label for="image2">Upload a photo of the same car which leaves the parking:</label>
-        <input type="file" id="image2" name="image2" accept="image/*" required>
-
-        <button type="submit">Analyze</button>
+      <h2>Single Image Analysis</h2>
+      <p>Quickly analyze a single image to extract license plate information and vehicle type.</p>
+      <form id="analysisForm" @submit.prevent="submitAnalysisForm">
+        <label for="singleImage">Upload an image to analyze:</label>
+        <input type="file" id="singleImage" name="image" accept="image/*">
+        <p>Or select a sample image:</p>
+        <div class="image-selector">
+          <img v-for="image in sampleImages" :key="image" :src="image" @click="selectSampleImage(image)" :class="{ selected: selectedImage === image }" />
+        </div>
+        <button type="submit">Analyze Image</button>
       </form>
-      <div v-if="response" class="response">
-        <p class="fee">Your parking fee is {{ response.fee }} for {{ response.duration }} day(s) and {{ response.hours }} hour(s).</p>
+      <div v-if="analysisResponse" class="response">
+        <h3>Analysis Data:</h3>
+        <div class="data-display">
+          <p>Plate: {{ analysisResponse.plateData.plate }}</p>
+          <p>Confidence: {{ analysisResponse.plateData.confidence }}</p>
+          <p>Vehicle Type: {{ analysisResponse.plateData.vehicleType }}</p>
+        </div>
+      </div>
+
+      <h2>Parking Fee Calculation</h2>
+      <p>Calculate parking fees based on a single image of a car. The service duplicates the image to simulate entry and exit, then calculates the fee based on vehicle type and a fixed parking duration.</p>
+      <p><b>Note:</b> This is a simplified demonstration. In a real-world scenario, you would use two distinct images (entry and exit) for accurate fee calculation.</p>
+      <form @submit.prevent="submitParkingForm">
+        <label for="image1">Upload a photo of the car:</label>
+        <input type="file" id="image1" name="image1" accept="image/*">
+        <p>Or select a sample image:</p>
+        <div class="image-selector">
+          <img v-for="image in sampleImages" :key="image" :src="image" @click="selectSampleImage1(image)" :class="{ selected: selectedImage1 === image }" />
+        </div>
+
+        <button type="submit">Calculate Fee</button>
+      </form>
+      <div v-if="parkingResponse" class="response">
+        <p class="fee">Your parking fee is {{ parkingResponse.fee }} for {{ parkingResponse.duration }} day(s) and {{ parkingResponse.hours }} hour(s).</p>
+        <h3>Image Data:</h3>
+        <div class="data-display">
+          <p>Plate: {{ parkingResponse.plateData1.plate }}</p>
+          <p>Confidence: {{ parkingResponse.plateData1.confidence }}</p>
+          <p>Vehicle Type: {{ parkingResponse.plateData1.vehicleType }}</p>
+        </div>
       </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/vue/dist/vue.js"></script>
     <script>
       new Vue({
         el: '#app',
         data: {
-          response: null,
+          parkingResponse: null,
+          analysisResponse: null,
+          sampleImages: [
+            'images/car1.jpg',
+            'images/car2.jpg',
+            'images/car3.jpg',
+            'images/car4.jpg',
+            'images/car5.jpg',
+            'images/car6.jpg'
+          ],
+          selectedImage: null,
+          selectedImage1: null,
         },
         methods: {
-            submitForm() {
+          submitParkingForm() {
             const form = document.querySelector('form');
             const formData = new FormData(form);
-            fetch('/calculateParkingFee', {
-              method: 'POST',
-              body: formData,
-            })
-              .then(response => response.json())
-              .then(data => {
-                this.response = data;
-                this.resetForm();
+
+            // Check if a sample image is selected
+            if (this.selectedImage1) {
+              fetch(this.selectedImage1)
+                .then(res => res.blob())
+                .then(blob => {
+                  const file = new File([blob], 'sample1.jpg', { type: 'image/jpeg' });
+                  formData.append('image1', file);
+                  formData.append('image2', file); // Duplicate the image for simulation
+                  return fetch('/calculateParkingFee', {
+                    method: 'POST',
+                    body: formData,
+                  });
+                })
+                .then(response => response.json())
+                .then(data => {
+                  this.parkingResponse = data;
+                  this.resetParkingForm();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            } else {
+              // If no sample image is selected, use the uploaded image
+              fetch('/calculateParkingFee', {
+                method: 'POST',
+                body: formData,
               })
-              .catch(error => {
-                console.log(error);
-              });
+                .then(response => response.json())
+                .then(data => {
+                  this.parkingResponse = data;
+                  this.resetParkingForm();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            }
           },
-          resetForm() {
+          submitAnalysisForm() {
+            const form = document.getElementById('analysisForm');
+            const formData = new FormData(form);
+            if (this.selectedImage) {
+              // If a sample image is selected, add it to the form data
+              fetch(this.selectedImage)
+                .then(res => res.blob())
+                .then(blob => {
+                  const file = new File([blob], 'sample.jpg', { type: 'image/jpeg' });
+                  formData.append('image', file);
+                  return fetch('/analyzePlate', {
+                    method: 'POST',
+                    body: formData,
+                  });
+                })
+                .then(response => response.json())
+                .then(data => {
+                  this.analysisResponse = data;
+                  this.resetAnalysisForm();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            } else {
+              // If no sample image is selected, use the uploaded image
+              fetch('/analyzePlate', {
+                method: 'POST',
+                body: formData,
+              })
+                .then(response => response.json())
+                .then(data => {
+                  this.analysisResponse = data;
+                  this.resetAnalysisForm();
+                })
+                .catch(error => {
+                  console.error(error);
+                });
+            }
+          },
+          resetParkingForm() {
             const form = document.querySelector('form');
             form.reset();
+            this.selectedImage1 = null;
+          },
+          resetAnalysisForm() {
+            const form = document.getElementById('analysisForm');
+            form.reset();
+            this.selectedImage = null; // Reset selected image
+          },
+          selectSampleImage(image) {
+            this.selectedImage = image;
+          },
+          selectSampleImage1(image) {
+            this.selectedImage1 = image;
           },
         },
       });

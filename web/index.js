@@ -119,6 +119,29 @@ app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 },
   }
 });
 
+app.post('/analyzePlate', upload.single('image'), async (req, res) => {
+  try {
+    const formData = new FormData();
+    const imageBuffer = req.file.buffer;
+
+    // Create a temporary file for the image
+    const imagePath = path.join(__dirname, 'temp_image.jpg');
+    fs.writeFileSync(imagePath, imageBuffer);
+    formData.append('image', fs.createReadStream(imagePath), req.file.originalname);
+
+    const response = await axios.post(`${PLATERECOGNIZER_SERVICE_URL}/analyzePlate`, formData, {
+      headers: formData.getHeaders()
+    });
+    res.send(response.data);
+  } catch (error) {
+    console.error('Plate recognizer service error:', error);
+    res.status(500).send({ error: error.toString() });
+  } finally {
+    // Clean up temporary files
+    fs.unlinkSync(path.join(__dirname, 'temp_image.jpg'));
+  }
+});
+
 app.listen(port, () => {
   console.log(`Web Service listening on port ${port}`);
 });

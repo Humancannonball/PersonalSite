@@ -33,16 +33,71 @@ app.post('/calculateParkingFee', upload.fields([{ name: 'image1', maxCount: 1 },
   const buffers = [image1[0].buffer, image2[0].buffer];
 
   try {
-    const plateData = await savePlateData(buffers[0], buffers[1]); // Call the savePlateData function
-    const { vehicleType, timestamp1, timestamp2, fee, duration, hours } = plateData; // Destructure the plateData object
-    console.log(fee, duration, hours);
-    res.send({ fee: fee, duration: duration, hours: hours });
+    const { fee, duration, hours, plateData1, plateData2 } = await savePlateData(buffers[0], buffers[1]); // Call the savePlateData function
+
+    // Extract relevant data from plateData1 and plateData2
+    const extractedData1 = extractRelevantData(plateData1);
+    const extractedData2 = extractRelevantData(plateData2);
+
+    res.send({ fee: fee, duration: duration, hours: hours, plateData1: extractedData1, plateData2: extractedData2 });
 
   } catch (err) {
     console.error(err); // Log the error for debugging
     res.status(500).send({ error: err.message }); // Send the error message to the client
   }
 });
+
+// New endpoint for single image analysis
+app.post('/analyzePlate', upload.single('image'), async (req, res) => {
+  const image = req.file;
+
+  if (!image) {
+    return res.status(400).send('Please upload an image.');
+  }
+
+  try {
+    const plateData = await getPlateData(image.buffer); // Use getPlateData directly
+    const extractedData = extractRelevantData(plateData);
+    res.send({ plateData: extractedData }); // Send back the extracted API data
+  } catch (err) {
+    console.error(err);
+    res.status(500).send({ error: err.message });
+  }
+});
+
+async function getPlateData(imageBuffer) { // Get the plate data from the API
+  const axios = require('axios');
+  const FormData = require('form-data');
+  const API_TOKEN = process.env.PLATERECOGNIZER_API_TOKEN;
+  const formData = new FormData();
+  formData.append('upload', imageBuffer, {
+    filename: 'image.jpg',
+    contentType: 'image/jpeg'
+  });
+
+  const response = await axios.post('https://api.platerecognizer.com/v1/plate-reader/', formData, {
+    headers: {
+      ...formData.getHeaders(),
+      'Authorization': `Token ${API_TOKEN}`
+    }
+  });
+  console.log(response.data);
+  return response.data;
+}
+
+// Function to extract relevant data
+function extractRelevantData(plateData) {
+  if (!plateData || !plateData.results || plateData.results.length === 0) {
+    return { plate: 'Not found', confidence: 'N/A', vehicleType: 'N/A' };
+  }
+
+  const result = plateData.results[0];
+  return {
+    plate: result.plate,
+    confidence: result.score,
+    vehicleType: result.vehicle ? result.vehicle.type : 'Unknown'
+  };
+}
 
 // Handle errors
 app.use((err, req, res, next) => {
